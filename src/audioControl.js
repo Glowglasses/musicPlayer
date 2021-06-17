@@ -1,5 +1,6 @@
 import $ from 'jquery'
-
+import musicData from "./musicCache"
+import {previousMusic, nextMusic} from "./change_music";
 let audioPlayer = $(".audio-player")
 let container = $(".container")
 let controls = $(".controls")
@@ -7,11 +8,15 @@ let playStyle = $(".playStyle")
 let next = $(".next")
 let previous = $(".previous")
 let playOrder = $(".playOrder")
+let buttonRow = $(".button-row")
 let audioStatus = "paused"
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
 let playOrderIndex = 0
 audioPlayer[0].controls = false
-
+musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
+     audioPlayer.attr("src",songs["musicUrl"])
+     $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+})
 // let clickEventFn =  () =>{
 //
 // }
@@ -19,6 +24,7 @@ playStyle.on("click",(e)=>{
     // 延点时，不然 播放暂停按的太快，无法获取audioStatus的值，就进行判断，会造成按钮不会改变
     // 或者将切换按钮逻辑放在监听 播放器是否暂停上
    // setTimeout(clickEventFn,1)
+    
     if (isPlaying()){
         audioPlayer[0].pause()
     }else {
@@ -29,7 +35,6 @@ playStyle.on("click",(e)=>{
     }
 })
 
-
 container.on("mouseover",()=>{
     if (isPlaying()){
         playStyle.removeClass("play")
@@ -38,13 +43,14 @@ container.on("mouseover",()=>{
         playStyle.removeClass("stop")
         playStyle.addClass("play")
     }
+    buttonRow.addClass("masking-out")
     playStyle.removeClass("hidden")
     next.removeClass("hidden")
     previous.removeClass("hidden")
     playOrder.removeClass("hidden")
-    
 })
 container.on("mouseout",()=>{
+    buttonRow.removeClass("masking-out")
     playStyle.removeClass("active")
     next.removeClass("active")
     previous.removeClass("active")
@@ -55,12 +61,11 @@ container.on("mouseout",()=>{
     playOrder.addClass("hidden")
 })
 
-
 previous.on("mousedown", ()=>{
-
+    previousMusic()
 })
 next.on("mousedown", ()=>{
-
+    nextMusic()
 })
 playOrder.on("click",()=>{
     // 切换播放顺序
@@ -74,10 +79,12 @@ playOrder.on("click",()=>{
         playOrder.addClass(playOrderList[playOrderIndex])
     }
     // 逻辑处理
+    //0 顺序 1 随机 2 单曲
     if (playOrderIndex === 0){
-    
+        audioPlayer[0].loop = false
     }else if(playOrderIndex === 1){
-    
+        console.log("mmmm")
+        audioPlayer[0].loop = false
     }else {
         audioPlayer[0].loop = true
     }
@@ -92,6 +99,10 @@ audioPlayer[0].addEventListener("playing",()=>{
 })
 audioPlayer[0].addEventListener("pause",()=>{
     controls[0].style.webkitAnimationPlayState = "paused";
+    console.log(playOrderIndex)
+    if (playOrderIndex === 0 && audioPlayer[0].ended){
+        nextMusic()
+    }
     playStyle.removeClass("stop")
     playStyle.addClass("play")
     audioStatus = "paused"

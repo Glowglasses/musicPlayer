@@ -39,7 +39,15 @@ body{
     animation: cover 23s linear infinite;
     background-image: url("https://p1.music.126.net/TXdH_qsA3L8Qlxt_acr4fw==/2412328511393200.jpg");
     background-size: 100%;
-    opacity: 0.9;
+}
+.button-row{
+    height: 70px;
+    width: 100%;
+    position: absolute;
+    top: 50%;
+    left: 0;
+    transform: translateY(-50%);
+    z-index: 1;
 }
 .playStyle{
     width: 70px;
@@ -48,12 +56,12 @@ body{
     animation: none;
 }
 .play{
-    position: fixed;
+    position: absolute;
     top: 50%;
     left: 50%;
     transform: translate(-50%, -50%);
     background-image: url("../assets/images/play.png");
-    filter: blur(1px);
+    z-index: 2;
 }
 .stop{
     position: absolute;
@@ -61,6 +69,7 @@ body{
     left: 50%;
     transform: translate(-50%, -50%);
     background-image: url("../assets/images/stop.png");
+    z-index: 2;
 }
 .previous{
     position: absolute;
@@ -71,6 +80,7 @@ body{
     transform: translateY(-50%);
     background-image: url("../assets/images/previous.png");
     background-size: 100%;
+    z-index: 2;
 }
 .next{
     width: 50px;
@@ -81,6 +91,7 @@ body{
     position: absolute;
     background-image: url("../assets/images/next.png");
     background-size: 100%;
+    z-index: 2;
 }
 .playOrder{
     width: 23px;
@@ -90,6 +101,7 @@ body{
     transform: translateY(-50%);
     position: absolute;
     background-size: 100%;
+    z-index: 2;
 }
 @keyframes cover {
        0%{}
@@ -111,4 +123,17 @@ body{
 }
 .simple-cycle-play{
     background-image: url("../assets/images/simple_cycle_play.png");
+}
+.cover-image-url{
+
+}
+.play-url{
+
+}
+.masking-out{
+    filter:Alpha(Opacity=60);
+    opacity:0.6;
+    background-color: #fff;
+    /*background-color: transparent;*/
+    /*opacity: 0.3;*/
 }
