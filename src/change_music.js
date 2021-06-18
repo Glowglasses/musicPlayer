@@ -1,9 +1,9 @@
 import $ from "jquery"
 import musicData from "./musicCache";
 let audioPlayer = $(".audio-player")
-let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
-let playingId = localStorage.getItem("playingId")
 function musicIdRightMove(){
+    let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
+    let playingId = localStorage.getItem("playingId")
     let previousId = playingId
     let playingIndex = musicId.indexOf(playingId)
     if (playingIndex === musicId.length - 1){
@@ -15,6 +15,8 @@ function musicIdRightMove(){
     localStorage.setItem("previousId",previousId)
 }
 function musicIdLeftMove(){
+    let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
+    let playingId = localStorage.getItem("playingId")
     let previousId = playingId
     let playingIndex = musicId.indexOf(playingId)
     if (playingIndex === 0){
@@ -26,6 +28,7 @@ function musicIdLeftMove(){
     localStorage.setItem("previousId",previousId)
 }
 function nextMusic(){
+    let playingId = localStorage.getItem("playingId")
     musicIdRightMove()
     musicData(playingId).then((songs) => {
         audioPlayer.attr("src",songs["musicUrl"])
@@ -34,6 +37,7 @@ function nextMusic(){
 }
 
 function previousMusic(){
+    let playingId = localStorage.getItem("playingId")
     musicIdLeftMove()
     musicData(playingId).then((songs) => {
         audioPlayer.attr("src",songs["musicUrl"])

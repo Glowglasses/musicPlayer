@@ -1,4 +1,4 @@
-import $ from 'jquery'
+import $ from "jquery"
 import musicData from "./musicCache"
 import {previousMusic, nextMusic} from "./change_music";
 let audioPlayer = $(".audio-player")
