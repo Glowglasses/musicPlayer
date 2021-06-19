@@ -1,21 +1,4 @@
 import $ from "jquery"
-let localData = localStorage.getItem("musicId")
-function getMusicId(){
-    return new Promise((resolve) =>  {
-        // 更新歌曲的接口
-        $.ajax("http://45.139.179.160:16333/musicData.json").done((data)=>{
-            localStorage.setItem("musicId",JSON.stringify(data))
-            resolve(data["id"][0])
-        })
-    })
-}
-
-if (localData === null) {
-    getMusicId().then((musicId) => {
-        localStorage.setItem("playingId", JSON.stringify(musicId))
-        localStorage.setItem("previousId", JSON.stringify(musicId))
-    })
-}
 
 function getMusicUrl(musicId){
     return new Promise((resolve)=>{
@@ -26,11 +9,11 @@ function getMusicUrl(musicId){
     })
 }
 
-function getMusicDetail(musicId){
+function getMusicDetail(PlayingMusicId){
     return new Promise((resolve)=>{
-        getMusicUrl(musicId).then((musicUrl) => {
+        getMusicUrl(PlayingMusicId).then((musicUrl) => {
             let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
-            $.ajax(baseUrl + musicId ).done((data)=>{
+            $.ajax(baseUrl + PlayingMusicId ).done((data)=>{
                 let songs = {}
                 songs["musicUrl"] = musicUrl
                 songs["name"] = data.songs[0].name

@@ -36,8 +36,8 @@ body{
     height: 350px;
     border-radius: 50%;
     position: relative;
-    animation: cover 23s linear infinite;
     background-image: url("https://p1.music.126.net/TXdH_qsA3L8Qlxt_acr4fw==/2412328511393200.jpg");
+    animation: cover 23s linear infinite;
     background-size: 100%;
 }
 .button-row{
@@ -104,7 +104,9 @@ body{
     z-index: 2;
 }
 @keyframes cover {
-       0%{}
+       0%{
+           transform: rotate(0turn);
+       }
     100%{
     transform: rotate(1turn);
     }
@@ -136,4 +138,8 @@ body{
     background-color: #fff;
     /*background-color: transparent;*/
     /*opacity: 0.3;*/
+}
+
+.cover-animation-init{
+    animation: cover 23s linear infinite;
 }

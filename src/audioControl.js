@@ -1,6 +1,6 @@
 import $ from "jquery"
 import musicData from "./musicCache"
-import {previousMusic, nextMusic} from "./change_music";
+import {previousMusic, nextMusic} from "./changeMusic";
 let audioPlayer = $(".audio-player")
 let container = $(".container")
 let controls = $(".controls")
@@ -13,13 +13,6 @@ let audioStatus = "paused"
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
 let playOrderIndex = 0
 audioPlayer[0].controls = false
-musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
-     audioPlayer.attr("src",songs["musicUrl"])
-     $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
-})
-// let clickEventFn =  () =>{
-//
-// }
 playStyle.on("click",(e)=>{
     // 延点时，不然 播放暂停按的太快，无法获取audioStatus的值，就进行判断，会造成按钮不会改变
     // 或者将切换按钮逻辑放在监听 播放器是否暂停上
@@ -62,13 +55,19 @@ container.on("mouseout",()=>{
 })
 
 previous.on("mousedown", ()=>{
+    
+    controls.removeClass("cover-animation-init")
+    controls.addClass("cover-animation-init")
     previousMusic()
+    controls.removeClass("cover-animation-init")
+    controls.addClass("cover-animation-init")
 })
 next.on("mousedown", ()=>{
     nextMusic()
 })
 playOrder.on("click",()=>{
     // 切换播放顺序
+    console.log(window.getComputedStyle(controls[0]).transform);
     if (playOrderIndex === 2){
         playOrder.removeClass(playOrderList[playOrderIndex])
         playOrderIndex = 0
@@ -98,8 +97,7 @@ audioPlayer[0].addEventListener("playing",()=>{
     audioStatus = "playing"
 })
 audioPlayer[0].addEventListener("pause",()=>{
-    controls[0].style.webkitAnimationPlayState = "paused";
-    console.log(playOrderIndex)
+    // controls[0].style.webkitAnimationPlayState = "paused";
     if (playOrderIndex === 0 && audioPlayer[0].ended){
         nextMusic()
     }
@@ -109,8 +107,8 @@ audioPlayer[0].addEventListener("pause",()=>{
 })
 document.addEventListener("visibilitychange",function(){
    if (document.visibilityState === 'hidden' && audioStatus === "playing"){
-       controls[0].style.webkitAnimationPlayState = "paused";
+       // controls[0].style.webkitAnimationPlayState = "paused";
    }else if (document.visibilityState === 'visible' && audioStatus === "playing"){
-       controls[0].style.webkitAnimationPlayState = "running";
+       // controls[0].style.webkitAnimationPlayState = "running";
    }
 });
