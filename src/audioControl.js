@@ -9,61 +9,80 @@ let next = $(".next")
 let previous = $(".previous")
 let playOrder = $(".playOrder")
 let buttonRow = $(".button-row")
-let audioStatus = "paused"
+let audioStatus
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
 let playOrderIndex = 0
 audioPlayer[0].controls = false
-playStyle.on("click",(e)=>{
+playStyle.on("click",()=>{
     // 延点时，不然 播放暂停按的太快，无法获取audioStatus的值，就进行判断，会造成按钮不会改变
     // 或者将切换按钮逻辑放在监听 播放器是否暂停上
    // setTimeout(clickEventFn,1)
-    
-    if (isPlaying()){
+    if (audioStatus === "playing"){
+        controls[0].style.webkitAnimationPlayState = "paused";
         audioPlayer[0].pause()
     }else {
         controls[0].style.webkitAnimationPlayState = "running";
+        audioPlayer[0].autoplay = "autoplay"
         audioPlayer[0].play()
         playStyle.removeClass("play")
-        playStyle.add("stop")
+        playStyle.addClass("stop")
     }
 })
 
 container.on("mouseover",()=>{
-    if (isPlaying()){
+    if (audioStatus === "playing"){
         playStyle.removeClass("play")
         playStyle.addClass("stop")
     }else{
         playStyle.removeClass("stop")
         playStyle.addClass("play")
     }
-    buttonRow.addClass("masking-out")
-    playStyle.removeClass("hidden")
-    next.removeClass("hidden")
-    previous.removeClass("hidden")
-    playOrder.removeClass("hidden")
+    buttonRow.removeClass("hidden")
+    buttonRow.addClass("active")
 })
 container.on("mouseout",()=>{
-    buttonRow.removeClass("masking-out")
-    playStyle.removeClass("active")
-    next.removeClass("active")
-    previous.removeClass("active")
-    playOrder.removeClass("active")
-    playStyle.addClass("hidden")
-    next.addClass("hidden")
-    previous.addClass("hidden")
-    playOrder.addClass("hidden")
+    buttonRow.removeClass("active")
+    buttonRow.addClass("hidden")
 })
-
+// 当歌曲无法播放时，自动跳到上一首
+function previousFn(){
+    previousMusic().then((audioPlayer)=>{
+        if (audioStatus === "paused"){
+            audioPlayer.removeAttr("autoplay")
+        }else if (audioPlayer.attr("src") === ""){
+            buttonRow.removeClass("active")
+            buttonRow.addClass("hidden")
+            setTimeout(()=>{
+                previousFn()
+            },3000)
+            audioPlayer.attr("autoplay", "autoplay")
+        }else {
+            audioPlayer.attr("autoplay", "autoplay")
+        }
+    })
+}
+// 当歌曲无法播放时，自动跳到下一首
+function nextFn(){
+    nextMusic().then((audioPlayer)=>{
+        if (audioStatus === "paused"){
+            audioPlayer.removeAttr("autoplay")
+        }else if (audioPlayer.attr("src") === ""){
+            buttonRow.removeClass("active")
+            buttonRow.addClass("hidden")
+            setTimeout(()=>{
+                nextFn()
+            },3000)
+            audioPlayer.attr("autoplay", "autoplay")
+        }else {
+            audioPlayer.attr("autoplay", "autoplay")
+        }
+    })
+}
 previous.on("mousedown", ()=>{
-    
-    controls.removeClass("cover-animation-init")
-    controls.addClass("cover-animation-init")
-    previousMusic()
-    controls.removeClass("cover-animation-init")
-    controls.addClass("cover-animation-init")
+    previousFn()
 })
 next.on("mousedown", ()=>{
-    nextMusic()
+   nextFn()
 })
 playOrder.on("click",()=>{
     // 切换播放顺序
@@ -88,27 +107,34 @@ playOrder.on("click",()=>{
         audioPlayer[0].loop = true
     }
 })
-
-function isPlaying(){
-    return audioStatus === "playing"
-}
-
+// audio.oncanplay = fn()
+audioPlayer[0].addEventListener("loadedmetadata",()=>{
+    console.log("qqqqqqqqqqqqqq")
+   if (audioPlayer[0].paused){
+       console.log("xxxxxxxxxxxxxxxxxxxxxxxxxxxxx")
+       controls[0].style.webkitAnimationPlayState = "paused";
+   }else {
+       console.log("xxxxxxxxxx")
+       controls[0].style.webkitAnimationPlayState = "running";
+   }
+})
 audioPlayer[0].addEventListener("playing",()=>{
     audioStatus = "playing"
 })
 audioPlayer[0].addEventListener("pause",()=>{
-    // controls[0].style.webkitAnimationPlayState = "paused";
+    controls[0].style.webkitAnimationPlayState = "paused";
     if (playOrderIndex === 0 && audioPlayer[0].ended){
-        nextMusic()
+        nextFn()
+    }else {
+        playStyle.removeClass("stop")
+        playStyle.addClass("play")
+        audioStatus = "paused"
     }
-    playStyle.removeClass("stop")
-    playStyle.addClass("play")
-    audioStatus = "paused"
 })
 document.addEventListener("visibilitychange",function(){
    if (document.visibilityState === 'hidden' && audioStatus === "playing"){
-       // controls[0].style.webkitAnimationPlayState = "paused";
+       controls[0].style.webkitAnimationPlayState = "paused";
    }else if (document.visibilityState === 'visible' && audioStatus === "playing"){
-       // controls[0].style.webkitAnimationPlayState = "running";
+       controls[0].style.webkitAnimationPlayState = "running";
    }
 });

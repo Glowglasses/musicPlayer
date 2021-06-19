@@ -16,14 +16,12 @@ if (musicId === null) {
         localStorage.setItem("playingId", musicId)
         localStorage.setItem("previousId", musicId)
         musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
-            console.log("33333333333")
             audioPlayer.attr("src",songs["musicUrl"])
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
         })
     })
 }else {
     musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
-        console.log("33333333333")
         audioPlayer.attr("src",songs["musicUrl"])
         $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
     })

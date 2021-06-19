@@ -29,21 +29,30 @@ function musicIdLeftMove(){
     localStorage.setItem("previousId",previousId)
 }
 function nextMusic(){
-    musicIdRightMove()
-    let playingId = localStorage.getItem("playingId")
-    musicData(playingId).then((songs) => {
-        audioPlayer.attr("src",songs["musicUrl"])
-        $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+    return new Promise((resolve)=>{
+        musicIdRightMove()
+        let playingId = localStorage.getItem("playingId")
+        musicData(playingId).then((songs) => {
+            audioPlayer.attr("src",songs["musicUrl"])
+            $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+            resolve(audioPlayer)
+        })
+
     })
+    
 }
 
 function previousMusic(){
-    musicIdLeftMove()
-    let playingId = localStorage.getItem("playingId")
-    musicData(playingId).then((songs) => {
-        audioPlayer.attr("src",songs["musicUrl"])
-        $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+    return new Promise((resolve)=>{
+        musicIdLeftMove()
+        let playingId = localStorage.getItem("playingId")
+        musicData(playingId).then((songs) => {
+            audioPlayer.attr("src",songs["musicUrl"])
+            $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+            resolve(audioPlayer)
+        })
     })
+    
 }
 
 export {previousMusic, nextMusic}

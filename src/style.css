@@ -9,8 +9,6 @@ button{
     background-color: transparent;
 }
 body{
-    height: 100vh;
-    width: 100vw;
     position: relative;
 
 }
@@ -19,8 +17,11 @@ body{
     height: 100vh;
     background-image: url("https://p1.music.126.net/TXdH_qsA3L8Qlxt_acr4fw==/2412328511393200.jpg");
     filter: blur(30px);
+    /*opacity: 0.5;*/
     background-repeat: no-repeat;
-    background-size: 100%;
+    background-position: center;
+    overflow: hidden;
+    background-size: cover;
 }
 .container{
     width: 350px;
@@ -48,12 +49,14 @@ body{
     left: 0;
     transform: translateY(-50%);
     z-index: 1;
+    background-color: rgba(255,255,255,0.6);
 }
 .playStyle{
-    width: 70px;
-    height: 70px;
+    width: 55px;
+    height: 55px;
     background-size: cover;
     animation: none;
+    opacity: 1;
 }
 .play{
     position: absolute;
@@ -94,6 +97,7 @@ body{
     z-index: 2;
 }
 .playOrder{
+    /*border: 1px solid red;*/
     width: 23px;
     height: 23px;
     right: 10%;
@@ -101,6 +105,8 @@ body{
     transform: translateY(-50%);
     position: absolute;
     background-size: 100%;
+    background-position: center;
+    background-repeat: no-repeat;
     z-index: 2;
 }
 @keyframes cover {
@@ -133,13 +139,15 @@ body{
 
 }
 .masking-out{
-    filter:Alpha(Opacity=60);
-    opacity:0.6;
-    background-color: #fff;
+    /*opacity:0.6;*/
+    background-color: rgba(255,255,255,0.6);
     /*background-color: transparent;*/
     /*opacity: 0.3;*/
 }
 
 .cover-animation-init{
     animation: cover 23s linear infinite;
+}
+.message{
+
 }
