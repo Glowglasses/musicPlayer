@@ -2,6 +2,7 @@ import $ from "jquery";
 let audioPlayer = $(".audio-player")
 import musicData from "./musicCache";
 let musicId = localStorage.getItem("musicId")
+let controls = $(".controls")
 function getMusicId(){
     return new Promise((resolve) =>  {
         // 更新歌曲的接口
@@ -24,5 +25,8 @@ if (musicId === null) {
     musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
         audioPlayer.attr("src",songs["musicUrl"])
         $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+        audioPlayer[0].play()
+        localStorage.setItem("isPlay","true")
+        controls.addClass("cover-animation-init")
     })
 }

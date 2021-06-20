@@ -32,10 +32,10 @@ function nextMusic(){
     return new Promise((resolve)=>{
         musicIdRightMove()
         let playingId = localStorage.getItem("playingId")
-        musicData(playingId).then((songs) => {
+        musicData(playingId).then((songs,isPlay) => {
             audioPlayer.attr("src",songs["musicUrl"])
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
-            resolve(audioPlayer)
+            resolve(audioPlayer,isPlay)
         })
 
     })

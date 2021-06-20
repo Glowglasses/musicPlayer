@@ -38,7 +38,6 @@ body{
     border-radius: 50%;
     position: relative;
     background-image: url("https://p1.music.126.net/TXdH_qsA3L8Qlxt_acr4fw==/2412328511393200.jpg");
-    animation: cover 23s linear infinite;
     background-size: 100%;
 }
 .button-row{
