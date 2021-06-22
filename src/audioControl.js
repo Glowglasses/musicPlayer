@@ -18,40 +18,38 @@ playStyle.on("click",()=>{
     if (isPlaying()){
         controls[0].style.webkitAnimationPlayState = "paused";
         audioPlayer[0].pause()
-        playStyle.removeClass("stop")
         playStyle.addClass("play")
+        playStyle.removeClass("stop")
         localStorage.setItem("isPlay","false")
     }else {
         controls[0].style.webkitAnimationPlayState = "running";
         audioPlayer[0].play()
-        playStyle.removeClass("play")
         playStyle.addClass("stop")
+        playStyle.removeClass("play")
         localStorage.setItem("isPlay","true")
     }
 })
 
-container.on("mouseover",()=>{
-    if (isPlaying()){
-        playStyle.removeClass("play")
-        playStyle.addClass("stop")
-    }else{
-        playStyle.removeClass("stop")
-        playStyle.addClass("play")
-    }
-    buttonRow.removeClass("hidden")
-    buttonRow.addClass("active")
-})
-container.on("mouseout",()=>{
-    buttonRow.removeClass("active")
-    buttonRow.addClass("hidden")
-})
+// container.on("mouseover",()=>{
+//     if (isPlaying()){
+//         playStyle.removeClass("play")
+//         playStyle.addClass("stop")
+//     }else{
+//         playStyle.removeClass("stop")
+//         playStyle.addClass("play")
+//     }
+//     // buttonRow.removeClass("hidden")
+//     // buttonRow.addClass("active")
+// })
+// container.on("mouseout",()=>{
+//     buttonRow.removeClass("active")
+//     buttonRow.addClass("hidden")
+// })
 // 当歌曲无法播放时，自动跳到上一首
 function previousFn(){
     previousMusic().then((audioPlayer)=>{
         if (!controlsInit(audioPlayer)){
-            setTimeout(()=>{
                 previousFn()
-            })
         }
     })
 }
@@ -59,10 +57,7 @@ function previousFn(){
 function nextFn(){
     nextMusic().then((audioPlayer)=>{
         if (!controlsInit(audioPlayer)){
-            setTimeout(()=>{
                 nextFn()
-            }, 1000)
-            
         }
     })
 }

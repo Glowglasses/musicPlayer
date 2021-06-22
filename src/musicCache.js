@@ -8,12 +8,25 @@ function getMusicUrl(musicId){
         })
     })
 }
-
-function getMusicDetail(PlayingMusicId){
+function getMusicLyric(musicId){
     return new Promise((resolve)=>{
-        getMusicUrl(PlayingMusicId).then((musicUrl) => {
+        let baseUrl = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
+        $.ajax(baseUrl + musicId ).done((data)=>{
+            if (data["lrc"] === undefined){
+                resolve("")
+            }else {
+                resolve(data["lrc"]["lyric"])
+            }
+            
+        })
+    })
+}
+
+function getMusicDetail(playingMusicId){
+    return new Promise((resolve)=>{
+        getMusicUrl(playingMusicId).then((musicUrl) => {
             let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
-            $.ajax(baseUrl + PlayingMusicId ).done((data)=>{
+            $.ajax(baseUrl + playingMusicId ).done((data)=>{
                 let songs = {}
                 songs["musicUrl"] = musicUrl
                 songs["name"] = data.songs[0].name
@@ -23,7 +36,11 @@ function getMusicDetail(PlayingMusicId){
                 })
                 songs["alia"] =  data.songs[0].alia[0]
                 songs["picUrl"] = data.songs[0].al.picUrl
-                resolve(songs)
+                getMusicLyric(playingMusicId).then((lyric)=>{
+                    songs["lyric"] = lyric
+                    resolve(songs)
+                })
+                
             })
         })
     })

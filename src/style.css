@@ -10,7 +10,9 @@ button{
 }
 body{
     position: relative;
-
+}
+li,ol,ul{
+    list-style: none;
 }
 .bg-image{
     width: 100vw;
@@ -24,35 +26,98 @@ body{
     background-size: cover;
 }
 .container{
-    width: 350px;
-    height: 350px;
+    width: 500px;
+    height: 450px;
     position: absolute;
     left: 50%;
     top: 50%;
-    border-radius: 50%;
+    border-radius: 50px;
     transform: translate(-50%, -50%);
+    background-color: 	rgba(128,128,128,0.6);
+    /*opacity: 0.5;*/
+    /*filter: blur(10px);*/
 }
 .controls {
-    width: 350px;
-    height: 350px;
+    width: 250px;
+    height: 250px;
     border-radius: 50%;
     position: relative;
+    left: 0;
+    top: 0;
+    /*transform: translateX(-50%);*/
     background-image: url("https://p1.music.126.net/TXdH_qsA3L8Qlxt_acr4fw==/2412328511393200.jpg");
     background-size: 100%;
 }
-.button-row{
-    height: 70px;
-    width: 100%;
+.lyric-display{
+    width: 200px;
+    height: 380px;
     position: absolute;
-    top: 50%;
-    left: 0;
-    transform: translateY(-50%);
-    z-index: 1;
-    background-color: rgba(255,255,255,0.6);
+    top: 13px;
+    right: 23px;
+    /*border: 1px solid red;*/
+    overflow: hidden;
+}
+.song-info{
+    width: 90%;
+    /*border: 1px solid yellow;*/
+    position: relative;
+    left: 50%;
+    transform: translateX(-50%);
+    text-align: center;
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+    z-index: 2;
+}
+.song-info > ul > li:first-child{
+    font-size: 1em;
+
+}
+.song-info > ul > li:nth-child(2){
+   font-size: 12px;
+}
+.song-info > ul > li:nth-child(3){
+    font-size: 12px;
+}
+
+.lyric-display > ul{
+    /*border: 1px solid blueviolet;*/
+    display: block;
+    position: relative;
+    width: 90%;
+    margin-top: 0;
+    left: 50%;
+    transform: translateX(-50%);
+    bottom: 0;
+    color: #f1ebeb;
+    overflow: hidden;
+}
+/*.song-name{*/
+/*    margin-bottom: 50%;*/
+/*}*/
+.lyric-display > ul > li{
+    /*border: 1px solid red;*/
+    width: 100%;
+    display: block;
+    font-size: 0.8em;
+    font-family: 'Trebuchet MS', Arial, Helvetica, sans-serif;
+    text-align: center;
+    margin-bottom: 1em;
+}
+/*.lyric-display > ul > li:first-child{*/
+/*    margin-top: 70%;*/
+/*}*/
+.button-row{
+    height: 45px;
+    width: 250px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    z-index: 2;
+    border-radius: 13px;
+    background-color: rgba(255,255,255,1);
 }
 .playStyle{
-    width: 55px;
-    height: 55px;
+    width: 30px;
+    height: 30px;
     background-size: cover;
     animation: none;
     opacity: 1;
@@ -75,8 +140,8 @@ body{
 }
 .previous{
     position: absolute;
-    width: 50px;
-    height: 50px;
+    width: 28px;
+    height: 28px;
     left: 20%;
     top: 50%;
     transform: translateY(-50%);
@@ -85,8 +150,8 @@ body{
     z-index: 2;
 }
 .next{
-    width: 50px;
-    height: 50px;
+    width: 28px;
+    height: 28px;
     right: 20%;
     top: 50%;
     transform: translateY(-50%);
@@ -99,7 +164,7 @@ body{
     /*border: 1px solid red;*/
     width: 23px;
     height: 23px;
-    right: 10%;
+    right: 5%;
     top: 50%;
     transform: translateY(-50%);
     position: absolute;
@@ -150,3 +215,16 @@ body{
 .message{
 
 }
+.lyric-active{
+    background-image: linear-gradient(120deg, #e0c3fc 0%, #8ec5fc 100%);
+}
+/*.frequency{*/
+/*    position: absolute;*/
+/*    bottom: 0;*/
+/*    left: 0;*/
+/*    height: 175px;*/
+/*    width: 350px;*/
+/*    border: 1px solid red;*/
+/*    z-index: 1;*/
+/*    border-radius: 0 0 350px 350px;*/
+/*}*/

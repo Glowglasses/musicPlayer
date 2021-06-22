@@ -1,6 +1,8 @@
 import $ from "jquery";
 let audioPlayer = $(".audio-player")
 import musicData from "./musicCache";
+import lyricDisplay from "./lyricDisplay"
+import songInfoDisplay from "./songInfoDisplay";
 let musicId = localStorage.getItem("musicId")
 let controls = $(".controls")
 function getMusicId(){
@@ -28,5 +30,7 @@ if (musicId === null) {
         audioPlayer[0].play()
         localStorage.setItem("isPlay","true")
         controls.addClass("cover-animation-init")
+        lyricDisplay(songs["lyric"])
+        songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
     })
 }
