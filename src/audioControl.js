@@ -12,6 +12,12 @@ let playOrder = $(".playOrder")
 let buttonRow = $(".button-row")
 let audioStatus
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
+let imageUrl = ["play.png","stop","previous.png","random_play.png","sequence_play","simple_cycle_play.png"]
+// 提前缓存图片
+let img = new Image()
+for (let i = 0 ; i < imageUrl.length; i++){
+    img.src = "../assets/images/" + imageUrl[i]
+}
 let playOrderIndex = 0
 audioPlayer[0].controls = false
 playStyle.on("click",()=>{
