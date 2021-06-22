@@ -25,23 +25,28 @@ function getMusicLyric(musicId){
 function getMusicDetail(playingMusicId){
     return new Promise((resolve)=>{
         getMusicUrl(playingMusicId).then((musicUrl) => {
-            let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
-            $.ajax(baseUrl + playingMusicId ).done((data)=>{
-                let songs = {}
-                songs["musicUrl"] = musicUrl
-                songs["name"] = data.songs[0].name
-                songs["singer"] = []
-                data.songs[0]["ar"].forEach((items) => {
-                    songs["singer"].push(items["name"])
+            if (musicUrl === undefined || musicUrl === ""){
+               resolve([])
+            }else {
+                let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
+                $.ajax(baseUrl + playingMusicId ).done((data)=>{
+                    let songs = {}
+                    songs["musicUrl"] = musicUrl
+                    songs["name"] = data.songs[0].name
+                    songs["singer"] = []
+                    data.songs[0]["ar"].forEach((items) => {
+                        songs["singer"].push(items["name"])
+                    })
+                    songs["alia"] =  data.songs[0].alia[0]
+                    songs["picUrl"] = data.songs[0].al.picUrl
+                    getMusicLyric(playingMusicId).then((lyric)=>{
+                        songs["lyric"] = lyric
+                        resolve(songs)
+                    })
+        
                 })
-                songs["alia"] =  data.songs[0].alia[0]
-                songs["picUrl"] = data.songs[0].al.picUrl
-                getMusicLyric(playingMusicId).then((lyric)=>{
-                    songs["lyric"] = lyric
-                    resolve(songs)
-                })
-                
-            })
+            }
+
         })
     })
 }

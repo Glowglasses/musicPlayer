@@ -1,5 +1,4 @@
 import $ from "jquery"
-let lyricDisplay = $(".lyric-display")
 let lyricList = $(".lyric-list")
 let audioPlayer = $(".audio-player")
 function parseLyric(lyric) {
@@ -15,7 +14,6 @@ function parseLyric(lyric) {
     }
     //上面用'\n'生成生成数组时，结果中最后一个为空元素，这里将去掉
     lines[lines.length - 1].length === 0 && lines.pop()
-    console.log(lines)
     lines.forEach((item /*数组元素值*/ , index /*元素索引*/ , array/*数组本身*/ )=> {
        time = item.match(pattern)
         //歌词
@@ -37,29 +35,46 @@ function parseLyric(lyric) {
 
 
 function getDisplayHeight(){
-    return lyricDisplay.css("height").split("px")[0]
+    return lyricList.css("height").split("px")[0]
+}
+function lyricScroll(lyric,currentLyricIndex,center, lyricArray){
+        // localStorage.setItem("currentLyricIndex", "0")
+        if (audioPlayer[0].currentTime > lyricArray[currentLyricIndex][0]){
+            console.log(currentLyricIndex)
+            let currentLyric = $(`.lyric-list > li:nth-child(${currentLyricIndex + 1})`)
+            currentLyric.prevAll().removeClass("lyric-active")
+            currentLyric.addClass("lyric-active")
+            let top = currentLyric.parent().scrollTop()-(currentLyric.parent().offset().top-currentLyric.offset().top) - center
+            currentLyric.parent().animate({
+                scrollTop: top
+            })
+            currentLyricIndex++
+        }
+        return currentLyricIndex
 }
 
 function displayLyric(lyric){
-    let lyricArray = parseLyric(lyric)
-    for (let i = 0; i < lyricArray.length; i++){
-        lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
-    }
-    // localStorage.setItem("currentLyricIndex", "0")
-    let center = getDisplayHeight() / 2 + 8
-    let currentLyricIndex = 0
-    audioPlayer.on("timeupdate",()=>{
-        // let currentLyricIndex = JSON.parse(localStorage.getItem("currentLyricIndex"))
-        if (audioPlayer[0].currentTime > lyricArray[currentLyricIndex][0]){
-            let currentLyric = $(`.lyric-list > li:nth-child(${currentLyricIndex + 1})`)
-            // let marginTop =  $("li").first().css("margin-top")
-            $(`.lyric-list li:nth-child(1)`).css('margin-top',  center - currentLyricIndex * 28 + "px");
-            currentLyric.prev().removeClass("lyric-active")
-            currentLyric.addClass("lyric-active")
-            // localStorage.setItem("currentLyricIndex",currentLyricIndex + 1)
-            currentLyricIndex++
+    audioPlayer.off("timeupdate",lyricScroll)
+    if (lyric !== ""){
+        let lyricArray = parseLyric(lyric)
+        lyricList.empty()
+        let center = getDisplayHeight() / 2
+        lyricList.css("padding-top",center + "px")
+        for (let i = 0; i < lyricArray.length; i++){
+            lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
         }
+        let currentLyricIndex = 0
+        audioPlayer.on("timeupdate", () => {
+            currentLyricIndex = lyricScroll(lyric,currentLyricIndex,center, lyricArray)
+            
         })
+    }else {
+        lyricList.empty()
+        let center = getDisplayHeight() / 2
+        lyricList.css("padding-top",center + "px")
+
+    }
+    
 }
 
 

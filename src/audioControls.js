@@ -3,21 +3,15 @@ import {previousMusic, nextMusic} from "./changeMusic";
 import controlsInit from "./audioControlsInit"
 import audioControlsInit from "./audioControlsInit";
 let audioPlayer = $(".audio-player")
-let container = $(".container")
 let controls = $(".controls")
 let playStyle = $(".playStyle")
 let next = $(".next")
 let previous = $(".previous")
 let playOrder = $(".playOrder")
-let buttonRow = $(".button-row")
 let audioStatus
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
-let imageUrl = ["play.png","stop","previous.png","random_play.png","sequence_play","simple_cycle_play.png"]
-// 提前缓存图片
-let img = new Image()
-for (let i = 0 ; i < imageUrl.length; i++){
-    img.src = "../assets/images/" + imageUrl[i]
-}
+let clickCount = 0
+let clickId
 let playOrderIndex = 0
 audioPlayer[0].controls = false
 playStyle.on("click",()=>{
@@ -36,42 +30,47 @@ playStyle.on("click",()=>{
     }
 })
 
-// container.on("mouseover",()=>{
-//     if (isPlaying()){
-//         playStyle.removeClass("play")
-//         playStyle.addClass("stop")
-//     }else{
-//         playStyle.removeClass("stop")
-//         playStyle.addClass("play")
-//     }
-//     // buttonRow.removeClass("hidden")
-//     // buttonRow.addClass("active")
-// })
-// container.on("mouseout",()=>{
-//     buttonRow.removeClass("active")
-//     buttonRow.addClass("hidden")
-// })
 // 当歌曲无法播放时，自动跳到上一首
-function previousFn(){
-    previousMusic().then((audioPlayer)=>{
+function previousFn(number){
+    previousMusic(number).then((audioPlayer)=>{
         if (!controlsInit(audioPlayer)){
-                previousFn()
+            previousFn(1)
         }
+        clickCount = 0
+        clickId = undefined
     })
 }
 // 当歌曲无法播放时，自动跳到下一首
-function nextFn(){
-    nextMusic().then((audioPlayer)=>{
+function nextFn(number){
+    nextMusic(number).then((audioPlayer)=>{
         if (!controlsInit(audioPlayer)){
-                nextFn()
+            nextFn(1)
         }
+        clickCount = 0
+        clickId = undefined
     })
 }
 previous.on("mousedown", ()=>{
-    previousFn()
+    clickCount++
+    audioPlayer.off("timeupdate")
+    if (clickId !== undefined){
+        clearTimeout(clickId)
+    }
+    
+    clickId = setTimeout(()=>{
+        previousFn(clickCount)
+    }, 20)
+    
 })
 next.on("mousedown", ()=>{
-   nextFn()
+    clickCount++
+    audioPlayer.off("timeupdate")
+    if (clickId !== undefined){
+        clearTimeout(clickId)
+    }
+    clickId = setTimeout(()=>{
+        nextFn(clickCount)
+    }, 100)
 })
 playOrder.on("click",()=>{
     // 切换播放顺序

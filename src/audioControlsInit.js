@@ -7,8 +7,6 @@ function controlsInit(audioPlayer){
     controls.remove()
     buttonRow.before(controls)
     if (audioPlayer.attr("src") === ""){
-        // buttonRow.addClass("hidden")
-        // buttonRow.removeClass("active")
         controls[0].style.webkitAnimationPlayState = "paused";
         return false;
     }else if (localStorage.getItem("isPlay") === "true"){
