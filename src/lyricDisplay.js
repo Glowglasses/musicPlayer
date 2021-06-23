@@ -1,6 +1,7 @@
 import $ from "jquery"
 let lyricList = $(".lyric-list")
 let audioPlayer = $(".audio-player")
+let lyricScrollFn
 function parseLyric(lyric) {
     let lines = lyric.split('\n')
     let pattern = /\[\d*:\d*.\d*]/
@@ -37,24 +38,20 @@ function parseLyric(lyric) {
 function getDisplayHeight(){
     return lyricList.css("height").split("px")[0]
 }
-function lyricScroll(lyric,currentLyricIndex,center, lyricArray){
-        // localStorage.setItem("currentLyricIndex", "0")
-        if (audioPlayer[0].currentTime > lyricArray[currentLyricIndex][0]){
-            console.log(currentLyricIndex)
-            let currentLyric = $(`.lyric-list > li:nth-child(${currentLyricIndex + 1})`)
+
+function lyricScroll(lyricParameter){
+        if (audioPlayer[0].currentTime > lyricParameter[2][lyricParameter[0]][0]){
+            let currentLyric = $(`.lyric-list > li:nth-child(${lyricParameter[0] + 1})`)
             currentLyric.prevAll().removeClass("lyric-active")
             currentLyric.addClass("lyric-active")
-            let top = currentLyric.parent().scrollTop()-(currentLyric.parent().offset().top-currentLyric.offset().top) - center
+            let top = currentLyric.parent().scrollTop()-(currentLyric.parent().offset().top-currentLyric.offset().top) - lyricParameter[1]
             currentLyric.parent().animate({
                 scrollTop: top
             })
-            currentLyricIndex++
+            lyricParameter[0]++
         }
-        return currentLyricIndex
 }
-
 function displayLyric(lyric){
-    audioPlayer.off("timeupdate",lyricScroll)
     if (lyric !== ""){
         let lyricArray = parseLyric(lyric)
         lyricList.empty()
@@ -63,21 +60,21 @@ function displayLyric(lyric){
         for (let i = 0; i < lyricArray.length; i++){
             lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
         }
+        
         let currentLyricIndex = 0
-        audioPlayer.on("timeupdate", () => {
-            currentLyricIndex = lyricScroll(lyric,currentLyricIndex,center, lyricArray)
-            
-        })
+        let lyricParameter  = [currentLyricIndex,center,lyricArray]
+        lyricScrollFn = () => {
+            return lyricScroll(lyricParameter)
+        }
+        audioPlayer.on("timeupdate", lyricScrollFn)
     }else {
         lyricList.empty()
         let center = getDisplayHeight() / 2
         lyricList.css("padding-top",center + "px")
-
     }
     
 }
 
 
-export default (lyric)=>{
-    return displayLyric(lyric)
-}
+export {displayLyric, lyricScrollFn}
+

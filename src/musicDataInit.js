@@ -2,17 +2,19 @@ import $ from "jquery";
 let audioPlayer = $(".audio-player")
 import musicData from "./musicCache";
 import {previousMusic,nextMusic} from "./changeMusic"
-import lyricDisplay from "./lyricDisplay";
+import {displayLyric} from "./lyricDisplay";
 import songInfoDisplay from "./songInfoDisplay";
 import controlsInit from "./audioControlsInit";
 let musicId = JSON.parse(localStorage.getItem("musicId"))
 let controls = $(".controls")
+let playStyle = $(".playStyle")
+let playOrder = $(".playOrder")
 // 提前缓存图片
-let imageUrl = ["play.png","stop","previous.png","random_play.png","sequence_play","simple_cycle_play.png"]
-let img = new Image()
-for (let i = 0 ; i < imageUrl.length; i++){
-    img.src = "../assets/images/" + imageUrl[i]
-}
+playOrder.addClass("simple-cycle-play")
+playOrder.addClass("random-play")
+playOrder.removeClass("simple-cycle-play")
+playOrder.removeClass("random-play")
+
 function getMusicId(){
     return new Promise((resolve) =>  {
         // 更新歌曲的接口
@@ -29,6 +31,10 @@ if (musicId === null) {
         musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
             audioPlayer.attr("src",songs["musicUrl"])
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+            audioPlayer[0].pause()
+            localStorage.setItem("isPlay","false")
+            songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
+            displayLyric(songs["lyric"])
         })
     })
 }else {
@@ -44,13 +50,17 @@ if (musicId === null) {
                    nextMusic(1).then()
                 }
             })
+        }else{
+            audioPlayer.attr("src",songs["musicUrl"])
+            $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
+            audioPlayer[0].play()
+            localStorage.setItem("isPlay","true")
+            controls.addClass("cover-animation-init")
+            playStyle.removeClass("play")
+            playStyle.addClass("stop")
+            songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
+            displayLyric(songs["lyric"])
         }
-        audioPlayer.attr("src",songs["musicUrl"])
-        $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
-        audioPlayer[0].play()
-        localStorage.setItem("isPlay","true")
-        controls.addClass("cover-animation-init")
-        songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
-        lyricDisplay(songs["lyric"])
+
     })
 }

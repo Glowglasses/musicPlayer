@@ -2,6 +2,8 @@ import $ from "jquery"
 import {previousMusic, nextMusic} from "./changeMusic";
 import controlsInit from "./audioControlsInit"
 import audioControlsInit from "./audioControlsInit";
+import {lyricScrollFn} from "./lyricDisplay";
+
 let audioPlayer = $(".audio-player")
 let controls = $(".controls")
 let playStyle = $(".playStyle")
@@ -10,10 +12,13 @@ let previous = $(".previous")
 let playOrder = $(".playOrder")
 let audioStatus
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
-let clickCount = 0
-let clickId
 let playOrderIndex = 0
 audioPlayer[0].controls = false
+// 连续点击相关变量
+let timer = null;
+let clickCount = 0  // 连续点击次数
+
+
 playStyle.on("click",()=>{
     if (isPlaying()){
         controls[0].style.webkitAnimationPlayState = "paused";
@@ -36,8 +41,6 @@ function previousFn(number){
         if (!controlsInit(audioPlayer)){
             previousFn(1)
         }
-        clickCount = 0
-        clickId = undefined
     })
 }
 // 当歌曲无法播放时，自动跳到下一首
@@ -46,35 +49,33 @@ function nextFn(number){
         if (!controlsInit(audioPlayer)){
             nextFn(1)
         }
-        clickCount = 0
-        clickId = undefined
     })
 }
 previous.on("mousedown", ()=>{
+    audioPlayer[0].pause()
+    clearTimeout(timer)
     clickCount++
-    audioPlayer.off("timeupdate")
-    if (clickId !== undefined){
-        clearTimeout(clickId)
-    }
-    
-    clickId = setTimeout(()=>{
+    timer = setTimeout(function() {
+        clearTimeout(timer)
+        audioPlayer.off("timeupdate",lyricScrollFn)
         previousFn(clickCount)
-    }, 20)
+        clickCount = 0
+    }, 250)
     
 })
 next.on("mousedown", ()=>{
+    audioPlayer[0].pause()
+    clearTimeout(timer)
     clickCount++
-    audioPlayer.off("timeupdate")
-    if (clickId !== undefined){
-        clearTimeout(clickId)
-    }
-    clickId = setTimeout(()=>{
+    timer = setTimeout(function() {
+        clearTimeout(timer)
+        audioPlayer.off("timeupdate",lyricScrollFn)
         nextFn(clickCount)
-    }, 100)
+        clickCount = 0
+    }, 250)
 })
 playOrder.on("click",()=>{
     // 切换播放顺序
-    console.log(window.getComputedStyle(controls[0]).transform);
     if (playOrderIndex === 2){
         playOrder.removeClass(playOrderList[playOrderIndex])
         playOrderIndex = 0

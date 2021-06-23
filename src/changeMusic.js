@@ -1,7 +1,7 @@
 import $ from "jquery"
 import musicData from "./musicCache";
 import songInfoDisplay from "./songInfoDisplay";
-import lyricDisplay from "./lyricDisplay";
+import {displayLyric} from "./lyricDisplay";
 let audioPlayer = $(".audio-player")
 function musicIdRightMove(count){
     let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
@@ -35,9 +35,9 @@ function changeAudioInfo(resolve){
         if (songs["musicUrl"] === undefined){
             audioPlayer.attr("src","")
             resolve(audioPlayer)
-        }else {
+        }else{
             songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
-            lyricDisplay(songs["lyric"])
+            displayLyric(songs["lyric"])
             audioPlayer.attr("src",songs["musicUrl"])
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
             resolve(audioPlayer)
