@@ -1,6 +1,6 @@
 import $ from "jquery";
 let audioPlayer = $(".audio-player")
-import musicData from "./musicCache";
+import musicDataGet from "./musicDataGet";
 import {previousMusic,nextMusic} from "./changeMusic"
 import {displayLyric} from "./lyricDisplay";
 import songInfoDisplay from "./songInfoDisplay";
@@ -24,12 +24,18 @@ function getMusicId(){
         })
     })
 }
+function setAudioSrc(arrayBuffer){
+    let blob =  new Blob([arrayBuffer],{type:"audio/wav"})
+    let src =  URL.createObjectURL(blob)
+    console.log(blob)
+    audioPlayer.attr("src", src)
+}
 if (musicId === null) {
     getMusicId().then((musicId) => {
         localStorage.setItem("playingId", musicId)
         localStorage.setItem("previousId", musicId)
-        musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
-            audioPlayer.attr("src",songs["musicUrl"])
+        musicDataGet(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
+            setAudioSrc(songs["audioContext"]["source"].buffer)
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
             audioPlayer[0].pause()
             localStorage.setItem("isPlay","false")
@@ -42,24 +48,30 @@ if (musicId === null) {
     if (playingId === "undefined"){
         localStorage.setItem("playingId",musicId["id"][0])
     }
-    musicData(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
-        // 有数据但是无法播放时，自动下一首
-        if (songs["musicUrl"] === undefined){
+    musicDataGet(JSON.parse(localStorage.getItem("playingId"))).then((songs) => {
+        if (songs === null){
             nextMusic().then((audioPlayer) => {
                 if (!controlsInit(audioPlayer)){
                    nextMusic(1).then()
                 }
             })
         }else{
-            audioPlayer.attr("src",songs["musicUrl"])
+            // getFrequencyData(songs["musicUrl"]).then(({source, analyser, frequency})=>{
+            //
+            // })
+            // audioPlayer.attr("src",songs["musicUrl"])
+            setAudioSrc(songs["audioContext"]["arrayBuffer"])
+            audioPlayer[0].load()
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
-            audioPlayer[0].play()
-            localStorage.setItem("isPlay","true")
+            audioPlayer[0].pause()
+            localStorage.setItem("isPlay","false")
             controls.addClass("cover-animation-init")
-            playStyle.removeClass("play")
-            playStyle.addClass("stop")
+            controls[0].style.webkitAnimationPlayState = "paused";
+            playStyle.removeClass("stop")
+            playStyle.addClass("play")
             songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
             displayLyric(songs["lyric"])
+            
         }
 
     })

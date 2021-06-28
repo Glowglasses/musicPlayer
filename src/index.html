@@ -10,20 +10,19 @@
 <body>
 <div class="bg-image cover-image-url"></div>
 <div class="container">
-    <audio controls class="audio-player"></audio>
-    <div id="audio-controls" class="controls cover-image-url" data-state="hidden">
-    </div>
-    <div class="lyric-display">
+    <audio controls class="audio-player" crossorigin="anonymous" src=""></audio>
+    <div id="audio-controls" class="controls cover-image-url" data-state="hidden"></div>
+    <canvas class="frequency"></canvas>
+    <section class="lyric-display">
         <div class="song-info"></div>
         <ul class="lyric-list"></ul>
-    </div>
-    <div class="button-row active">
-        <button class="playStyle play"></button>
+    </section>
+    <section class="button-row active">
+        <button class="playStyle" data-playing="false"></button>
         <button class="previous"></button>
         <button class="next"></button>
-        <button class="playOrder sequence-play"></button>
-    </div>
-<!--    <div class="frequency"></div>-->
+        <button class="playOrder" data-playOrder="sequence-play" ></button>
+    </section>
 </div>
 </body>
 </html>

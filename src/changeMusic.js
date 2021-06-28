@@ -1,8 +1,14 @@
 import $ from "jquery"
-import musicData from "./musicCache";
+import musicData from "./musicDataGet";
 import songInfoDisplay from "./songInfoDisplay";
 import {displayLyric} from "./lyricDisplay";
 let audioPlayer = $(".audio-player")
+function setAudioSrc(arrayBuffer){
+    let blob =  new Blob([arrayBuffer],{type:"audio/wav"})
+    let src =  URL.createObjectURL(blob)
+    console.log(blob)
+    audioPlayer.attr("src", src)
+}
 function musicIdRightMove(count){
     let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
     let playingId = localStorage.getItem("playingId")
@@ -32,13 +38,13 @@ function musicIdLeftMove(count){
 function changeAudioInfo(resolve){
     let playingId = localStorage.getItem("playingId")
     musicData(playingId).then((songs) => {
-        if (songs["musicUrl"] === undefined){
+        if (songs === null){
             audioPlayer.attr("src","")
             resolve(audioPlayer)
         }else{
             songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
             displayLyric(songs["lyric"])
-            audioPlayer.attr("src",songs["musicUrl"])
+            setAudioSrc(songs["audioContext"]["arrayBuffer"])
             $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
             resolve(audioPlayer)
         }
