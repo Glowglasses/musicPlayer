@@ -1,6 +1,6 @@
 import $ from "jquery"
 let controls = $(".controls")
-let buttonRow = $(".button-row")
+let buttonRow = $(".controls-bar")
 
 function controlsInit(audioPlayer){
     controls.remove()

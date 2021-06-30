@@ -11,18 +11,34 @@
 <div class="bg-image cover-image-url"></div>
 <div class="container">
     <audio controls class="audio-player" crossorigin="anonymous" src=""></audio>
-    <div id="audio-controls" class="controls cover-image-url" data-state="hidden"></div>
-    <canvas class="frequency"></canvas>
+    <section>
+        <div id="audio-controls" class="controls cover-image-url" data-state="hidden"></div>
+    </section>
+    <section>
+        <canvas class="frequency"></canvas>
+    </section>
     <section class="lyric-display">
         <div class="song-info"></div>
         <ul class="lyric-list"></ul>
     </section>
-    <section class="button-row active">
-        <button class="playStyle" data-playing="false"></button>
-        <button class="previous"></button>
-        <button class="next"></button>
-        <button class="playOrder" data-playOrder="sequence-play" ></button>
+    <section class="controls-bar active">
+        <div class="song-control-bar">
+            <button class="previous"></button>
+            <button class="playStyle" data-playing="false"></button>
+            <button class="next"> </button>
+        </div>
+        <div class="progress-bar">
+            <div class="cur">
+                <div class="btn"></div>
+            </div>
+        </div>
+        <div class="setting-bar">
+            <button class="playOrder-setting" data-playOrder="sequence-play" ></button>
+            <div class="volume-setting"></div>
+            <div class="music-list"></div>
+        </div>
     </section>
+
 </div>
 </body>
 </html>

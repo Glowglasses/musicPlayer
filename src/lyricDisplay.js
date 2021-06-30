@@ -1,10 +1,13 @@
 import $ from "jquery"
 import musicData from "./musicDataGet";
 import {nextMusic} from "./changeMusic";
+import syncProgressBar from "./progressBar";
 let lyricList = $(".lyric-list")
 let audioPlayer = $(".audio-player")
 let lyricScrollFn
 let lyricDuration
+let lyricArray
+let center
 function parseLyric(lyric) {
     let lines = lyric.split('\n')
     let pattern = /\[\d*:\d*.\d*]/
@@ -37,11 +40,11 @@ function parseLyric(lyric) {
     return result
 }
 
-
 function getDisplayHeight(){
     return lyricList.css("height").split("px")[0]
 }
 function lyricScroll(lyricParameter){
+    syncProgressBar(lyricDuration, audioPlayer[0].currentTime)
      if (audioPlayer[0].currentTime >= lyricDuration){
         audioPlayer.off("timeupdate",lyricScrollFn)
         if (localStorage.getItem("playOrder") === "simple"){
@@ -70,9 +73,10 @@ function displayLyric(lyric){
         lyricDuration = audioPlayer[0].duration
     }
     if (lyric !== ""){
-        let lyricArray = parseLyric(lyric)
+        lyricArray = parseLyric(lyric)
+        console.log(lyricArray)
         lyricList.empty()
-        let center = getDisplayHeight() / 2
+        center = getDisplayHeight() / 2
         lyricList.css("padding-top",center + "px")
         for (let i = 0; i < lyricArray.length; i++){
             lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
@@ -91,6 +95,12 @@ function displayLyric(lyric){
     
 }
 
+function syncLyric(currentTime){
+    let currentLi
+    // for (let i = 0; i < lyricArray.length, i++){
+    //
+    // }
+}
 
 export {displayLyric, lyricScrollFn}
 
