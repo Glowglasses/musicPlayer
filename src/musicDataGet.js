@@ -4,10 +4,9 @@ const audioContext = new AudioContext()
 function getMusicUrl(musicId){
     return new Promise((resolve)=>{
         // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=song&id="
-        // let baseUrl = `http://music.163.com/api/song/enhance/player/url?id=${musicId}&ids=[${musicId}]&br=3200000`
-        let baseUrl = "https://bird.ioliu.cn/netease/song?id="
+        let baseUrl = "https://v1.hitokoto.cn/nm/url/"
         $.ajax(baseUrl + musicId).done((data)=>{
-            resolve(data.data["mp3"].url)
+            resolve(data["data"][0].url)
         })
     })
 }
@@ -43,13 +42,12 @@ function getMusicArrayBuffer(musicId){
 function getMusicLyric(musicId){
     return new Promise((resolve)=>{
         // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
-        // let baseUrl = `https://music.163.com/api/song/lyric?id=${musicId}&lv=1&kv=1&tv=-1`
-        let baseUrl = `http://music.163.com/api/song/media?id=`
+        let baseUrl = `https://v1.hitokoto.cn/nm/lyric/`
         $.ajax(baseUrl + musicId).done((data)=>{
             if (data["lrc"] === undefined){
                 resolve("")
             }else {
-                resolve(data["lrc"])
+                resolve(data["lrc"].lyric)
             }
             
         })
@@ -63,24 +61,17 @@ function getMusicDetail(playingMusicId){
                resolve(null)
             }else {
                 // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
-                // let baseUrl = `https://music.163.com/api/song/detail/?id=${playingMusicId}&ids=%5B${playingMusicId}%5D`/
-                let baseUrl = 'https://bird.ioliu.cn/netease/song?id='
+                let baseUrl = 'https://v1.hitokoto.cn/nm/detail/'
                 $.ajax(baseUrl + playingMusicId ).done((data)=>{
                     let songs = {}
                     songs["audioContext"] = audioContext
-                    // songs["name"] = data.songs[0].name
-                    songs["name"] = data["data"].name
+                    songs["name"] = data.songs[0].name
                     songs["singer"] = []
-                    // data.songs[0]["ar"].forEach((items) => {
-                    //     songs["singer"].push(items["name"])
-                    // })
-                    data["data"]["ar"].forEach((items) => {
+                    data.songs[0]["ar"].forEach((items) => {
                         songs["singer"].push(items["name"])
                     })
-                    // songs["alia"] =  data.songs[0].alia[0]
-                    songs["alia"] =  data["data"].alia[0]
-                    // songs["picUrl"] = data.songs[0].al.picUrl
-                    songs["picUrl"] = data["data"]["al"].picUrl
+                    songs["alia"] =  data.songs[0].alia[0]
+                    songs["picUrl"] = data.songs[0].al.picUrl
                     getMusicLyric(playingMusicId).then((lyric)=>{
                         songs["lyric"] = lyric
                         resolve(songs)

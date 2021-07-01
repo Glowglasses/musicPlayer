@@ -97,9 +97,11 @@ function displayLyric(lyric){
 
 function syncLyric(currentTime){
     let currentLi
-    // for (let i = 0; i < lyricArray.length, i++){
-    //
-    // }
+    for (let i = 0; i < lyricArray.length; i++){
+        if (currentTime >= lyricArray[i][0] && currentTime <= lyricArray[i + 1][0]){
+            currentLi = i
+        }
+    }
 }
 
 export {displayLyric, lyricScrollFn}
