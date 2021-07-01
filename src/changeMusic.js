@@ -6,7 +6,6 @@ let audioPlayer = $(".audio-player")
 function setAudioSrc(arrayBuffer){
     let blob =  new Blob([arrayBuffer],{type:"audio/wav"})
     let src =  URL.createObjectURL(blob)
-    console.log(blob)
     audioPlayer.attr("src", src)
 }
 function musicIdRightMove(count){

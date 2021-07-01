@@ -3,8 +3,8 @@ const AudioContext = window.AudioContext || window.webkitAudioContext
 const audioContext = new AudioContext()
 function getMusicUrl(musicId){
     return new Promise((resolve)=>{
-        // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=song&id="
-        let baseUrl = "https://v1.hitokoto.cn/nm/url/"
+        let baseUrl = "https://api.imjad.cn/cloudmusic/?type=song&id="
+        // let baseUrl = "https://v1.hitokoto.cn/nm/url/"
         $.ajax(baseUrl + musicId).done((data)=>{
             resolve(data["data"][0].url)
         })
@@ -41,8 +41,8 @@ function getMusicArrayBuffer(musicId){
 }
 function getMusicLyric(musicId){
     return new Promise((resolve)=>{
-        // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
-        let baseUrl = `https://v1.hitokoto.cn/nm/lyric/`
+        let baseUrl = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
+        // let baseUrl = `https://v1.hitokoto.cn/nm/lyric/`
         $.ajax(baseUrl + musicId).done((data)=>{
             if (data["lrc"] === undefined){
                 resolve("")
@@ -60,8 +60,8 @@ function getMusicDetail(playingMusicId){
             if (audioContext === null){
                resolve(null)
             }else {
-                // let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
-                let baseUrl = 'https://v1.hitokoto.cn/nm/detail/'
+                let baseUrl = "https://api.imjad.cn/cloudmusic/?type=detail&id="
+                // let baseUrl = 'https://v1.hitokoto.cn/nm/detail/'
                 $.ajax(baseUrl + playingMusicId ).done((data)=>{
                     let songs = {}
                     songs["audioContext"] = audioContext

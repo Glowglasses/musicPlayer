@@ -4,10 +4,12 @@ import {nextMusic} from "./changeMusic";
 import syncProgressBar from "./progressBar";
 let lyricList = $(".lyric-list")
 let audioPlayer = $(".audio-player")
-let lyricScrollFn
 let lyricDuration
 let lyricArray
 let center
+let currentLyricIndex
+let lyricParameter
+let lyric
 function parseLyric(lyric) {
     let lines = lyric.split('\n')
     let pattern = /\[\d*:\d*.\d*]/
@@ -43,66 +45,82 @@ function parseLyric(lyric) {
 function getDisplayHeight(){
     return lyricList.css("height").split("px")[0]
 }
-function lyricScroll(lyricParameter){
+function lyricScroll(event){
+    console.log("xxxxx")
     syncProgressBar(lyricDuration, audioPlayer[0].currentTime)
      if (audioPlayer[0].currentTime >= lyricDuration){
-        audioPlayer.off("timeupdate",lyricScrollFn)
+        audioPlayer.off("timeupdate",lyricScroll)
         if (localStorage.getItem("playOrder") === "simple"){
             audioPlayer[0].currentTime = 0
             audioPlayer[0].play()
-            displayLyric(lyricParameter[3])
+            displayLyric(event.data[3])
         }else if(localStorage.getItem("playOrder") === "sequence"){
             nextMusic(1).then()
         }
-    } else if (audioPlayer[0].currentTime > lyricParameter[2][lyricParameter[0]][0]){
-        let currentLyric = $(`.lyric-list > li:nth-child(${lyricParameter[0] + 1})`)
-        currentLyric.prevAll().removeClass("lyric-active")
-        currentLyric.addClass("lyric-active")
-        let top = currentLyric.parent().scrollTop()-(currentLyric.parent().offset().top-currentLyric.offset().top) - lyricParameter[1]
-        currentLyric.parent().animate({
+    } else if (audioPlayer[0].currentTime > event.data[2][event.data[0]][0]){
+         let currentLyric = $(`.lyric-list > li:nth-child(${event.data[0] + 1})`)
+         currentLyric.prevAll().removeClass("lyric-active")
+         currentLyric.siblings().removeClass("lyric-active")
+         currentLyric.addClass("lyric-active")
+         // let top = currentLyric.parent().scrollTop()-(currentLyric.parent().offset().top-currentLyric.offset().top) - event.data[1]
+         let top = currentLyric[0].offsetTop - lyricList[0].offsetTop - center
+         currentLyric.parent().animate({
             scrollTop: top
         })
         // 判断currentIndex 是否超过lyricArray长度
-        if (lyricParameter[0] < lyricParameter[2].length - 1){
-            lyricParameter[0]++
+        if (event.data[0] < event.data[2].length - 1){
+            event.data[0]++
         }
     }
 }
-function displayLyric(lyric){
+function displayLyric(lyricString){
+    lyric = lyricString
     audioPlayer[0].oncanplay = function () {
         lyricDuration = audioPlayer[0].duration
     }
     if (lyric !== ""){
         lyricArray = parseLyric(lyric)
-        console.log(lyricArray)
         lyricList.empty()
         center = getDisplayHeight() / 2
         lyricList.css("padding-top",center + "px")
         for (let i = 0; i < lyricArray.length; i++){
             lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
         }
-        let currentLyricIndex = 0
-        let lyricParameter  = [currentLyricIndex,center,lyricArray,lyric]
-        lyricScrollFn = () => {
-            return lyricScroll(lyricParameter)
-        }
-        audioPlayer.on("timeupdate", lyricScrollFn)
+        currentLyricIndex = 0
+        lyricParameter  = [currentLyricIndex,center,lyricArray,lyric]
+        audioPlayer.on("timeupdate",lyricParameter, lyricScroll)
     }else {
         lyricList.empty()
-        let center = getDisplayHeight() / 2
-        lyricList.css("padding-top",center + "px")
     }
     
 }
 
 function syncLyric(currentTime){
-    let currentLi
-    for (let i = 0; i < lyricArray.length; i++){
-        if (currentTime >= lyricArray[i][0] && currentTime <= lyricArray[i + 1][0]){
-            currentLi = i
+    audioPlayer.off("timeupdate")
+    console.log("yyyyyyyyy")
+    if (currentTime >= lyricArray[lyricArray.length - 1][0]){
+        lyricParameter  = [lyricArray.length - 1,center,lyricArray,lyric,currentTime]
+        audioPlayer.on("timeupdate", lyricParameter,lyricScroll)
+        audioPlayer[0].currentTime = currentTime
+    }else if(currentTime <= lyricArray[0][0]){
+        lyricParameter  = [0,center,lyricArray,lyric,currentTime]
+        audioPlayer.on("timeupdate", lyricParameter,lyricScroll)
+        audioPlayer[0].currentTime = currentTime
+    }else {
+        for (let i = 0; i < lyricArray.length; i++){
+            if (currentTime >= lyricArray[i][0] && currentTime < lyricArray[i + 1][0]){
+                currentLyricIndex = i
+                let top = $(`.lyric-list > li:nth-child(${currentLyricIndex})`)[0].offsetTop -  lyricList[0].offsetTop - center
+                lyricList.animate({
+                    scrollTop: top
+                })
+                lyricParameter  = [currentLyricIndex,center,lyricArray,lyric,currentTime]
+                audioPlayer.on("timeupdate",lyricParameter, lyricScroll)
+                audioPlayer[0].currentTime = currentTime
+            }
         }
     }
 }
 
-export {displayLyric, lyricScrollFn}
+export {displayLyric,lyricScroll, syncLyric, lyricDuration}
 

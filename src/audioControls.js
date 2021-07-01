@@ -2,7 +2,7 @@ import $ from "jquery"
 import {previousMusic, nextMusic} from "./changeMusic";
 import controlsInit from "./audioControlsInit"
 import audioControlsInit from "./audioControlsInit";
-import {lyricScrollFn} from "./lyricDisplay";
+// import {lyricScroll} from "./lyricDisplay"
 let audioPlayer = $(".audio-player")
 let controls = $(".controls")
 let playStyle = $(".playStyle")
@@ -69,7 +69,7 @@ previous.on("mousedown", ()=>{
     clickCount++
     timer = setTimeout(function() {
         clearTimeout(timer)
-        audioPlayer.off("timeupdate",lyricScrollFn)
+        audioPlayer.off("timeupdate")
         previousFn(clickCount)
         clickCount = 0
     }, 250)
@@ -81,7 +81,7 @@ next.on("mousedown", ()=>{
     clickCount++
     timer = setTimeout(function() {
         clearTimeout(timer)
-        audioPlayer.off("timeupdate",lyricScrollFn)
+        audioPlayer.off("timeupdate")
         nextFn(clickCount)
         clickCount = 0
     }, 250)

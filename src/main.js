@@ -1,7 +1,7 @@
-// import "./musicDataInit"
+import "./musicDataInit"
 import './frequencySpectrumDisplay'
 import "./style.css"
-// import "./musicDataGet"
+import "./musicDataGet"
 import '../assets/images/next.png'
 import '../assets/images/play.png'
 import '../assets/images/previous.png'
