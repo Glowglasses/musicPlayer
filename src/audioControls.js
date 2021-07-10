@@ -1,23 +1,20 @@
 import $ from "jquery"
 import {previousMusic, nextMusic} from "./changeMusic";
-import controlsInit from "./audioControlsInit"
-import audioControlsInit from "./audioControlsInit";
-// import {lyricScroll} from "./lyricDisplay"
+
 let audioPlayer = $(".audio-player")
-let controls = $(".controls")
+let cover = $(".cover")
 let playStyle = $(".playStyle")
 let next = $(".next")
 let previous = $(".previous")
 let playOrder = $(".playOrder")
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
 let playOrderIndex = 0
-audioPlayer[0].controls = false
+
 // 连续点击相关变量
 let timer = null;
 let clickCount = 0  // 连续点击次数
 playStyle.on("click",function (){
     audioPlayer[0].play()
-    // audioContext 对象连接
     // if (isPlaying()){
     //     controls[0].style.webkitAnimationPlayState = "paused";
     //     // audioPlayer[0].pause()
@@ -34,13 +31,13 @@ playStyle.on("click",function (){
     //     localStorage.setItem("isPlay","true")
     // }
     if (this.dataset.playing === 'false') {
-        controls[0].style.webkitAnimationPlayState = "running"
+        cover[0].style.webkitAnimationPlayState = "running"
         audioPlayer[0].play()
         this.dataset.playing = 'true'
         localStorage.setItem("isPlay","true")
         // if track is playing pause it
     } else if (this.dataset.playing === 'true') {
-        controls[0].style.webkitAnimationPlayState = "paused"
+        cover[0].style.webkitAnimationPlayState = "paused"
         audioPlayer[0].pause()
         this.dataset.playing = 'false'
         localStorage.setItem("isPlay","false")
@@ -50,17 +47,17 @@ playStyle.on("click",function (){
 // 当歌曲无法播放时，自动跳到上一首
 function previousFn(number){
     previousMusic(number).then((audioPlayer)=>{
-        if (!controlsInit(audioPlayer)){
+        // if (!controlsInit(audioPlayer)){
             previousFn(1)
-        }
+        // }
     })
 }
 // 当歌曲无法播放时，自动跳到下一首
 function nextFn(number){
     nextMusic(number).then((audioPlayer)=>{
-        if (!controlsInit(audioPlayer)){
+        // if (!controlsInit(audioPlayer)){
             nextFn(1)
-        }
+        // }
     })
 }
 previous.on("mousedown", ()=>{

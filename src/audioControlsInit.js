@@ -1,22 +1,19 @@
 import $ from "jquery"
-let controls = $(".controls")
+let cover = $(".cover")
 let buttonRow = $(".controls-bar")
 
 function controlsInit(audioPlayer){
-    controls.remove()
-    buttonRow.before(controls)
+    cover.remove()
+    buttonRow.before(cover)
     if (audioPlayer.attr("src") === ""){
-        controls[0].style.webkitAnimationPlayState = "paused";
+        cover[0].style.webkitAnimationPlayState = "paused";
         return false;
     }else if (localStorage.getItem("isPlay") === "true"){
-        audioPlayer[0].play()
-        controls[0].style.webkitAnimationPlayState = "running";
+        cover[0].style.webkitAnimationPlayState = "running";
     }else {
-        controls[0].style.webkitAnimationPlayState = "paused";
+        cover[0].style.webkitAnimationPlayState = "paused";
     }
-    return true;
 }
 
-export default (audioPlayer)=>{
-    return controlsInit(audioPlayer)
-}
+
+export default controlsInit

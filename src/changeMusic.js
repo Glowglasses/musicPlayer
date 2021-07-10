@@ -1,7 +1,8 @@
 import $ from "jquery"
 import musicData from "./musicDataGet";
-import songInfoDisplay from "./songInfoDisplay";
-import {displayLyric} from "./lyricDisplay";
+import songInfoDisplay from "./songInfoInit";
+import {displayLyric} from "./musciLyricInit";
+import display from "./pageDisplayUpdate";
 let audioPlayer = $(".audio-player")
 function setAudioSrc(arrayBuffer){
     let blob =  new Blob([arrayBuffer],{type:"audio/wav"})
@@ -37,16 +38,13 @@ function musicIdLeftMove(count){
 function changeAudioInfo(resolve){
     let playingId = localStorage.getItem("playingId")
     musicData(playingId).then((songs) => {
-        if (songs === null){
-            audioPlayer.attr("src","")
-            resolve(audioPlayer)
-        }else{
-            songInfoDisplay([songs["name"],songs["alia"],songs["singer"]])
-            displayLyric(songs["lyric"])
-            setAudioSrc(songs["audioContext"]["arrayBuffer"])
-            $(".cover-image-url").css("background-image",`url(${songs.picUrl})`)
-            resolve(audioPlayer)
-        }
+        // if (songs === null){
+        //     audioPlayer.attr("src","")
+        //     resolve(audioPlayer)
+        // }else{
+        display(songs)
+        resolve(audioPlayer)
+        // }
         
     })
 }
