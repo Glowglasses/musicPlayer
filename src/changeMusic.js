@@ -1,14 +1,8 @@
 import $ from "jquery"
 import musicData from "./musicDataGet";
-import songInfoDisplay from "./songInfoInit";
-import {displayLyric} from "./musciLyricInit";
 import display from "./pageDisplayUpdate";
 let audioPlayer = $(".audio-player")
-function setAudioSrc(arrayBuffer){
-    let blob =  new Blob([arrayBuffer],{type:"audio/wav"})
-    let src =  URL.createObjectURL(blob)
-    audioPlayer.attr("src", src)
-}
+
 function musicIdRightMove(count){
     let musicId = JSON.parse(localStorage.getItem("musicId"))["id"]
     let playingId = localStorage.getItem("playingId")
@@ -38,14 +32,8 @@ function musicIdLeftMove(count){
 function changeAudioInfo(resolve){
     let playingId = localStorage.getItem("playingId")
     musicData(playingId).then((songs) => {
-        // if (songs === null){
-        //     audioPlayer.attr("src","")
-        //     resolve(audioPlayer)
-        // }else{
         display(songs)
         resolve(audioPlayer)
-        // }
-        
     })
 }
 function nextMusic(count){

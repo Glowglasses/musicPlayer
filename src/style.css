@@ -131,11 +131,29 @@ li,ol,ul{
     align-items: center;
 }
 .progress-bar{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    flex-wrap: nowrap;
     width: 45%;
     height: 7px;
     border-radius: 2px;
     background: #808080;
     box-shadow: 0 4px 4px rgba(0, 0, 0, 0.25);
+    overflow: visible;
+}
+.music-time{
+    -webkit-user-select:none;
+    -moz-user-select:none;
+    -o-user-select:none;
+    user-select:none;
+    font-size: 12px;
+    font-family: "Arial Black", serif;
+    width: 10px;
+    height: 35px;
+    /*overflow: auto;*/
+    transform: scale(0.7);
+    margin-left: -10px;
 }
 .setting-bar {
     display: flex;
@@ -144,21 +162,19 @@ li,ol,ul{
     width: 20%;
     height: 100%;
 }
-.progress-bar > .cur {
-    height: 8px;
+.progress-bar > .progress-bar-cur {
+    height: 7px;
     width: 0;
     padding-left: 0;
-    background: #FF6347;
+    background: #00BFFF;
 }
-.progress-bar > .cur > .btn{
-    position: relative;
-    height: 15px;
-    width: 15px;
+.progress-bar > .progress-bar-btn{
+    height: 12px;
+    width: 12px;
     border-radius: 50%;
-    background-color: salmon;
-    left: 0;
-    top: 50%;
-    transform: translate(-50%, -50%);
+    background-color: #1E90FF;
+    margin-left: -6px;
+    flex-shrink: 0;
 }
 .playStyle{
     width: 28px;

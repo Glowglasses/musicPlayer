@@ -10,7 +10,7 @@
 <body>
 <div class="bg-image cover-image-url"></div>
 <div class="container">
-    <audio controls class="audio-player" crossorigin="anonymous" src="" style="visibility: hidden"></audio>
+    <audio controls class="audio-player" crossorigin="anonymous" style="display: none"></audio>
     <section>
         <div class="cover"></div>
     </section>
@@ -28,9 +28,14 @@
             <button class="next"> </button>
         </div>
         <div class="progress-bar">
-            <div class="cur">
-                <div class="btn"></div>
-            </div>
+            <div class="progress-bar-cur"></div>
+            <div class="progress-bar-btn"></div>
+        </div>
+        <div class="music-time">
+            <ol>
+                <li>00:11</li>
+                <li>01:36</li>
+            </ol>
         </div>
         <div class="setting-bar">
             <button class="playOrder-setting" data-playOrder="sequence-play" ></button>

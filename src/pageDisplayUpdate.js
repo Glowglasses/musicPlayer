@@ -3,7 +3,7 @@
  * */
 import $ from "jquery"
 import songInfoInit from "./songInfoInit"
-import musicLyricInit from "./musciLyricInit"
+import musicLyricInit from "./musicLyricInit"
 import syncLyric from "./syncMusicLyric"
 import audioControlsInit from "./audioControlsInit";
 
@@ -78,6 +78,8 @@ function display(songs){
     audioPlayer.on("timeupdate", songs, musicTimeEvent)
     if (localStorage.getItem("isPlay") === "true"){
         audioPlayer[0].play()
+    }else {
+        audioPlayer[0].pause()
     }
 }
 

@@ -2,12 +2,10 @@ import $ from "jquery"
 const AudioContext = window.AudioContext || window.webkitAudioContext
 const audioContext = new AudioContext()
 let songs = {}
-let listName
-
-let musicUrlAPI
-let musicLyricAPI
-let musicDetailAPI
-let musicIdAPI
+let musicUrlAPI = "/assets/musicInfo/url/"
+let musicLyricAPI= "/assets/musicInfo/lyric/"
+let musicDetailAPI = "/assets/musicInfo/detail/"
+let musicIdAPI = "/assets/musicInfo/musicId.json"
 // let musicUrlAPI = "https://api.imjad.cn/cloudmusic/?type=song&id="
 // let musicUrlAPI = "https://v1.hitokoto.cn/nm/url/"
 // let musicLyricAPI = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
@@ -120,21 +118,30 @@ function getMusicDetail(playingMusicId){
 }
 
 
-export default function getMusicData (){
+export default function getMusicData (playingId){
     return  new Promise((resolve) => {
-        if (listName !== localStorage.getItem("listName")){
-            musicUrlAPI = "/assets/musicInfo/url/"
-            musicLyricAPI= "/assets/musicInfo/lyric/"
-            musicDetailAPI = "/assets/musicInfo/detail/"
-            musicIdAPI = "/assets/musicInfo/musicId.json"
-            getMusicId().then((musicId)=>{
-                getMusicDetail(musicId).then((songs) => {
-                   resolve(songs)
-               })
-           })
+        if (localStorage.getItem("listName") === 'local'){
+            if (localStorage.getItem("musicId") === null){
+                
+                getMusicId().then((listFirstId)=>{
+                    getMusicDetail(listFirstId).then((songs) => {
+                        localStorage.setItem("playingId", listFirstId + "")
+                        resolve(songs)
+                    })
+                })
+            }else {
+                console.log(playingId)
+                getMusicDetail(playingId).then((songs) => {
+                    localStorage.setItem("playingId", playingId + "")
+                    resolve(songs)
+                })
+            }
+            
         }
-        // getMusicDetail(playingMusicId).then((songs) => {
-        //     resolve(songs)
-        // })
+        // else {
+        //     getMusicDetail(playingId).then((songs) => {
+        //         resolve(songs)
+        //     })
+        // }
     })
 }

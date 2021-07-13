@@ -2,7 +2,7 @@ import $ from "jquery";
 let audioPlayer = $(".audio-player")
 let lyricList = $(".lyric-list")
 function syncLyric(lyricArray, center, currentIndex){
-    if (currentIndex < lyricArray.length - 1){
+    if (currentIndex < lyricArray.length){
         if (audioPlayer[0].currentTime > lyricArray[currentIndex][0]){
             let currentLyric = $(`.lyric-list > li:nth-child(${currentIndex + 1})`)
             currentLyric.prevAll().removeClass("lyric-active")
