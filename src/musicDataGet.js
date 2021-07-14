@@ -1,11 +1,13 @@
 import $ from "jquery"
 const AudioContext = window.AudioContext || window.webkitAudioContext
+
 const audioContext = new AudioContext()
 let songs = {}
 let musicUrlAPI = "/assets/musicInfo/url/"
 let musicLyricAPI= "/assets/musicInfo/lyric/"
 let musicDetailAPI = "/assets/musicInfo/detail/"
 let musicIdAPI = "/assets/musicInfo/musicId.json"
+
 // let musicUrlAPI = "https://api.imjad.cn/cloudmusic/?type=song&id="
 // let musicUrlAPI = "https://v1.hitokoto.cn/nm/url/"
 // let musicLyricAPI = "https://api.imjad.cn/cloudmusic/?type=lyric&id="
@@ -27,7 +29,7 @@ function getMusicId(){
 
 function getMusicUrl(musicId){
     return new Promise((resolve, reject)=>{
-        $.ajax(musicUrlAPI + musicId).then((data)=>{
+        $.ajax(musicUrlAPI + musicId ).then((data)=>{
             data = JSON.parse(data)
             if (data["data"][0].url === undefined){
                 resolve("")
@@ -88,7 +90,7 @@ function getMusicLyric(musicId){
 function getMusicDetail(playingMusicId){
     return new Promise((resolve,reject)=>{
         getMusicArrayBuffer(playingMusicId).then((audioCtx) => {
-            $.ajax(musicDetailAPI + playingMusicId ).then((data)=>{
+            $.ajax(musicDetailAPI + playingMusicId).then((data)=>{
                 data = JSON.parse(data)
                 if (audioCtx === null){
                     songs["audioCtx"] = null
@@ -122,15 +124,14 @@ export default function getMusicData (playingId){
     return  new Promise((resolve) => {
         if (localStorage.getItem("listName") === 'local'){
             if (localStorage.getItem("musicId") === null){
-                
                 getMusicId().then((listFirstId)=>{
                     getMusicDetail(listFirstId).then((songs) => {
+                        console.log(songs);
                         localStorage.setItem("playingId", listFirstId + "")
                         resolve(songs)
                     })
                 })
             }else {
-                console.log(playingId)
                 getMusicDetail(playingId).then((songs) => {
                     localStorage.setItem("playingId", playingId + "")
                     resolve(songs)
