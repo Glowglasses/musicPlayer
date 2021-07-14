@@ -2,11 +2,10 @@ import $ from "jquery"
 import {previousMusic, nextMusic} from "./changeMusic";
 let audioPlayer = $(".audio-player")
 let cover = $(".cover")
-let playStyle = $(".playStyle")
-let playOrder = $(".playOrder")
+let backgroundImg = $(".bg-image")
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
-let playOrderIndex = 0
 let progressBarCur = $(".progress-bar-cur")
+let container = $(".container")
 // 连续点击相关变量
 let timer = null;
 let clickCount = 0  // 连续点击次数
@@ -36,25 +35,17 @@ controlsBar.on("click",(e)=>{
             e.target.dataset.playing = 'false'
             localStorage.setItem("isPlay", "false")
         }
-    }else if (eventClass.hasClass("playOrder")){
+    }else if (eventClass.hasClass("play-order-setting")){
         // 切换播放顺序
-        if (playOrderIndex === 2) {
-            playOrder.removeClass(playOrderList[playOrderIndex])
-            playOrderIndex = 0
-            playOrder.addClass(playOrderList[playOrderIndex])
-        } else {
-            playOrder.removeClass(playOrderList[playOrderIndex])
-            playOrderIndex++
-            playOrder.addClass(playOrderList[playOrderIndex])
-        }
-        // 逻辑处理
-        //0 顺序 1 随机 2 单曲
-        if (playOrderIndex === 0) {
-            localStorage.setItem("playOrder", "sequence")
-        } else if (playOrderIndex === 1) {
+        if (playOrderList.indexOf(e.target.dataset.playorder) === 0) {
+            e.target.dataset.playorder = playOrderList[1]
             localStorage.setItem("playOrder", "random")
-        } else {
+        } else if (playOrderList.indexOf(e.target.dataset.playorder) === 1){
+            e.target.dataset.playorder = playOrderList[2]
             localStorage.setItem("playOrder", "simple")
+        }else {
+            e.target.dataset.playorder = playOrderList[0]
+            localStorage.setItem("playOrder", "sequence")
         }
     }
 })
@@ -86,7 +77,7 @@ controlsBar.on("mousedown",(e)=>{
     }else if (eventClass.hasClass("progress-bar-btn")){
         oldClientX = e.clientX
         // 计算进度条移动距离
-        controlsBar.on("mousemove",(e)=>{
+        $(document).on("mousemove",(e)=>{
             e.preventDefault()
             newClientX = e.clientX
             paddingLeft = parseInt(progressBarCur.css("padding-left").split("px")[0])
@@ -102,8 +93,9 @@ controlsBar.on("mousedown",(e)=>{
 })
 $(document).on("mouseup", (e)=>{
     e.preventDefault()
-    controlsBar.off("mousemove")
+    $(document).off("mousemove")
 })
+
 // document.addEventListener("visibilitychange",function(){
 //    if (document.visibilityState === 'hidden' && audioStatus === "playing"){
 //        cover[0].style.webkitAnimationPlayState = "paused";

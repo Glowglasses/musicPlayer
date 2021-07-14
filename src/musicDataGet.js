@@ -60,7 +60,8 @@ function getMusicArrayBuffer(musicId){
                     if (request.readyState === 4) {
                         if (request.status === 200) {
                             let audioData = request.response
-                                resolve({"audioCtx":audioContext,"arrayBuffer": audioData})
+                            console.log(audioData)
+                            resolve({"audioCtx":audioContext,"arrayBuffer": audioData})
                         } else {
                             resolve(null)
                         }
@@ -126,7 +127,6 @@ export default function getMusicData (playingId){
             if (localStorage.getItem("musicId") === null){
                 getMusicId().then((listFirstId)=>{
                     getMusicDetail(listFirstId).then((songs) => {
-                        console.log(songs);
                         localStorage.setItem("playingId", listFirstId + "")
                         resolve(songs)
                     })

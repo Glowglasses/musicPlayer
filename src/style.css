@@ -151,9 +151,11 @@ li,ol,ul{
     font-family: "Arial Black", serif;
     width: 10px;
     height: 35px;
-    /*overflow: auto;*/
     transform: scale(0.7);
     margin-left: -10px;
+    display: flex;
+    align-items: center;
+
 }
 .setting-bar {
     display: flex;
@@ -215,7 +217,7 @@ li,ol,ul{
     background-repeat: no-repeat;
     background-position: center;
 }
-.playOrder-setting{
+.play-order-setting{
     width: 18px;
     height: 18px;
     background-size: 100%;
