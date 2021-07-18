@@ -2,7 +2,6 @@ import $ from "jquery";
 let lyricList = $(".lyric-list")
 let temCurrentIndex
 function syncLyric(lyricArray, center, currentIndex){
-    console.log(currentIndex)
     if (temCurrentIndex !== currentIndex && currentIndex !== undefined){
         let currentLyric = $(`.lyric-list > li:nth-child(${currentIndex + 1})`)
         currentLyric.prevAll().removeClass("lyric-active")
@@ -15,5 +14,4 @@ function syncLyric(lyricArray, center, currentIndex){
         currentLyric.addClass("lyric-active")
     }
 }
-
 export default syncLyric

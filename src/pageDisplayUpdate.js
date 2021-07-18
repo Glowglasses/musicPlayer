@@ -4,7 +4,7 @@
 import $ from "jquery"
 import songInfoInit from "./songInfoInit"
 import musicLyricInit from "./musicLyricInit"
-import syncLyric from "./syncMusicLyric"
+import syncLyric from "./musicLyricSync"
 import {nextMusic} from "./changeMusic";
 import {progressTimeSync} from "./progressSync";
 
@@ -100,11 +100,12 @@ function musicTimeEvent(event){
     progressTimeSync(audioPlayer[0].currentTime,audioPlayer[0].duration)
     // 播放结束处理
     if (audioPlayer[0].currentTime >= audioPlayer[0].duration){
-        if (playOrderSetting[0].dataset.playOrder === "sequence-play"){
+        console.log(playOrderSetting[0].dataset.playOrder)
+        if (playOrderSetting[0].dataset.playorder === "sequence-play"){
             nextMusic(1).then()
-        }else if (playOrderSetting[0].dataset.playOrder === "random-play"){
+        }else if (playOrderSetting[0].dataset.playorder === "random-play"){
         
-        }else if (playOrderSetting[0].dataset.playOrder === "simple-cycle-play"){
+        }else if (playOrderSetting[0].dataset.playorder === "simple-cycle-play"){
             display(song)
         }
     }

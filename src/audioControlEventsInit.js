@@ -16,6 +16,7 @@ let newClientX
 let moveClientX
 let secondMove
 let isMove = false
+localStorage.setItem("isMove","false")
 // 事件委托
 let controlsBar = $(".controls-bar")
 controlsBar.on("click",(e)=>{
@@ -81,6 +82,7 @@ controlsBar.on("mousedown",(e)=>{
         if (audioPlayer[0].duration !== "NaN"){
             secondMove = parseInt($(".progress-bar").css("width").split("px")[0]) / audioPlayer[0].duration
             // 计算进度条移动距离
+           oldClientX = e.clientX + e.target.style.width.split("px")[0]
             $(document).on("mousemove",(e)=>{
                 e.preventDefault()
                 newClientX = e.clientX
@@ -90,6 +92,7 @@ controlsBar.on("mousedown",(e)=>{
                 if (moveClientX !== 0 && (moveClientX + paddingLeft) <= parseInt($(".progress-bar").css("width").split("px")[0]) && (moveClientX + paddingLeft) >= 0){
                     progressBarCur.css("padding-left",  paddingLeft + moveClientX + "px")
                     isMove = true
+                    localStorage.setItem("isMove","true")
                 }
             })
         }
@@ -106,9 +109,10 @@ $(document).on("mouseup", (e)=>{
     e.preventDefault()
     if (isMove){
         audioPlayer[0].currentTime = (paddingLeft + moveClientX) / secondMove
-        $(document).off("mousemove")
         isMove = false
+        localStorage.setItem("isMove","false")
     }
+    $(document).off("mousemove")
 })
 
 // document.addEventListener("visibilitychange",function(){
