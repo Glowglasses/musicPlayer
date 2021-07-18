@@ -60,7 +60,6 @@ function getMusicArrayBuffer(musicId){
                     if (request.readyState === 4) {
                         if (request.status === 200) {
                             let audioData = request.response
-                            console.log(audioData)
                             resolve({"audioCtx":audioContext,"arrayBuffer": audioData})
                         } else {
                             resolve(null)
@@ -73,10 +72,12 @@ function getMusicArrayBuffer(musicId){
     })
 }
 function getMusicLyric(musicId){
-    return new Promise((resolve)=>{
+    return new Promise((resolve, reject)=>{
         $.ajax(musicLyricAPI + musicId).then((data)=>{
             data = JSON.parse(data)
-            if (data["lrc"] === undefined){
+            if (data["nolyric"] === true){
+                resolve("noLyric")
+            } else if (data["lrc"] === undefined){
                 resolve("")
             }else {
                 resolve(data["lrc"].lyric)

@@ -14,6 +14,8 @@ let paddingLeft
 let oldClientX
 let newClientX
 let moveClientX
+let secondMove
+let isMove = false
 // 事件委托
 let controlsBar = $(".controls-bar")
 controlsBar.on("click",(e)=>{
@@ -54,6 +56,7 @@ controlsBar.on("click",(e)=>{
 controlsBar.on("mousedown",(e)=>{
     e.preventDefault()
     let eventClass = $(e.target)
+    
     if (eventClass.hasClass("previous")) {
         audioPlayer[0].pause()
         clearTimeout(timer)
@@ -75,25 +78,37 @@ controlsBar.on("mousedown",(e)=>{
             clickCount = 0
         }, 250)
     }else if (eventClass.hasClass("progress-bar-btn")){
-        oldClientX = e.clientX
-        // 计算进度条移动距离
-        $(document).on("mousemove",(e)=>{
-            e.preventDefault()
-            newClientX = e.clientX
-            paddingLeft = parseInt(progressBarCur.css("padding-left").split("px")[0])
-            moveClientX = newClientX - oldClientX
-            oldClientX = newClientX
-            if (moveClientX !== 0 && (moveClientX + paddingLeft) < parseInt($(".progress-bar").css("width").split("px")[0])){
-                progressBarCur.css("padding-left",  paddingLeft + moveClientX + "px")
-            }
-        })
+        if (audioPlayer[0].duration !== "NaN"){
+            secondMove = parseInt($(".progress-bar").css("width").split("px")[0]) / audioPlayer[0].duration
+            // 计算进度条移动距离
+            $(document).on("mousemove",(e)=>{
+                e.preventDefault()
+                newClientX = e.clientX
+                paddingLeft = parseInt(progressBarCur.css("padding-left").split("px")[0])
+                moveClientX = newClientX - oldClientX
+                oldClientX = newClientX
+                if (moveClientX !== 0 && (moveClientX + paddingLeft) <= parseInt($(".progress-bar").css("width").split("px")[0]) && (moveClientX + paddingLeft) >= 0){
+                    progressBarCur.css("padding-left",  paddingLeft + moveClientX + "px")
+                    isMove = true
+                }
+            })
+        }
+        
     }else if (eventClass.hasClass("progress-bar") || eventClass.hasClass("progress-bar-cur")){
-        progressBarCur.css("padding-left",  e.offsetX + "px")
+        if (audioPlayer[0].duration !== "NaN"){
+            secondMove = parseInt($(".progress-bar").css("width").split("px")[0]) / audioPlayer[0].duration
+            audioPlayer[0].currentTime = (e.offsetX) / secondMove
+            progressBarCur.css("padding-left",  e.offsetX + "px")
+        }
     }
 })
 $(document).on("mouseup", (e)=>{
     e.preventDefault()
-    $(document).off("mousemove")
+    if (isMove){
+        audioPlayer[0].currentTime = (paddingLeft + moveClientX) / secondMove
+        $(document).off("mousemove")
+        isMove = false
+    }
 })
 
 // document.addEventListener("visibilitychange",function(){

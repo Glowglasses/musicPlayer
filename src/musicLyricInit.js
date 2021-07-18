@@ -41,20 +41,22 @@ function getDisplayHeight(){
 
 function musicLyricInit(lyricString){
     lyric = lyricString
-    if (lyric !== ""){
+    center = getDisplayHeight() / 2
+    if (lyric === "noLyric"){
+        lyricList.empty()
+        lyricList.append('<li>纯音乐，无歌词</li>')
+        lyricList.css("padding-top",center + "px")
+        return undefined
+    }else if (lyric !== ""){
         lyricArray = parseLyric(lyric)
         lyricList.empty()
-        center = getDisplayHeight() / 2
         lyricList.css("padding-top",center + "px")
         lyricList.css("padding-bottom",center + "px")
         for (let i = 0; i < lyricArray.length; i++){
             lyricList.append($(`<li>${lyricArray[i][1]}</li>`))
         }
-        
-    }else {
-        lyricList.empty()
+        return lyricArray
     }
-    return lyricArray
 }
 
 export default musicLyricInit

@@ -6,6 +6,7 @@ import songInfoInit from "./songInfoInit"
 import musicLyricInit from "./musicLyricInit"
 import syncLyric from "./syncMusicLyric"
 import {nextMusic} from "./changeMusic";
+import {progressTimeSync} from "./progressSync";
 
 let audioPlayer = $(".audio-player")
 let bgImg = $(".bg-image")
@@ -18,11 +19,9 @@ let song
 let lyricArray
 let center
 let currentLyricIndex
-let currentTime
 // 设置歌曲src
 function setAudioSrc(arrayBuffer){
     let blob =  new Blob([arrayBuffer],{type:"audio/mpeg"})
-    console.log(blob)
     let src =  URL.createObjectURL(blob)
     audioPlayer.attr("src", src)
 }
@@ -61,7 +60,20 @@ function disPlayMusicInfo(songs){
 function displayLyric(songs){
     lyricArray = musicLyricInit(songs["lyric"])
 }
-
+function updateLyricIndex(){
+    if (audioPlayer[0].duration){
+        let tem = lyricArray.findIndex((item) => {
+            return  audioPlayer[0].currentTime < item[0]
+        })
+        if (tem === 0){
+            currentLyricIndex = 0
+        }else if (tem === -1){
+            currentLyricIndex = lyricArray.length - 1
+        }else{
+            currentLyricIndex = tem - 1
+        }
+    }
+}
 // 显示歌曲时间
 function displayMusicDuration(){
     audioPlayer[0].load()
@@ -74,12 +86,6 @@ function displayFrequency(songs){
 
 }
 
-// 显示进度条
-// function displayProgressBar(songs){
-//
-// }
-
-// 歌曲时间更新监听
 
 function musicTimeEvent(event){
     //显示当前播放时间
@@ -87,12 +93,13 @@ function musicTimeEvent(event){
     //歌词同步时间
     if (lyricArray !== undefined){
         center = $(".lyric-list").css("height").split("px")[0] / 2
-        currentLyricIndex = syncLyric(lyricArray,center, currentLyricIndex)
+        updateLyricIndex()
+        syncLyric(lyricArray,center, currentLyricIndex)
     }
-    //进度条同步时间
+    //进度条时间同步
+    progressTimeSync(audioPlayer[0].currentTime,audioPlayer[0].duration)
     // 播放结束处理
     if (audioPlayer[0].currentTime >= audioPlayer[0].duration){
-        // console.log("总时间",audioPlayer[0].duration, "当前时间", audioPlayer[0].currentTime)
         if (playOrderSetting[0].dataset.playOrder === "sequence-play"){
             nextMusic(1).then()
         }else if (playOrderSetting[0].dataset.playOrder === "random-play"){
@@ -106,7 +113,6 @@ function musicTimeEvent(event){
 function display(songs){
     song = songs
     audioPlayer.off("timeupdate")
-    currentLyricIndex = 0
     displayControls()
     setAudioSrc(songs["audioCtx"].arrayBuffer)
     displayImage(songs)

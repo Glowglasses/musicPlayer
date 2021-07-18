@@ -9,7 +9,5 @@ import '../assets/images/simple_cycle_play.png'
 import '../assets/images/stop.png'
 import '../assets/images/volume.png'
 import '../assets/images/music_list.png'
-import './progressBarEventsInit'
 import "./musicDataInit"
-// import './test'
 
