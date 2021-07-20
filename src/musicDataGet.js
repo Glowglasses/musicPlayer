@@ -41,36 +41,36 @@ function getMusicUrl(musicId){
         })
     })
 }
-function getMusicArrayBuffer(musicId){
-    return new Promise((resolve) => {
-        getMusicUrl(musicId).then((musicUrl) =>{
-            // 歌曲收费无法获取连接
-            if (musicUrl === ""){
-                resolve("")
-            }else if (musicUrl === null){
-                // 请求接口失败 换个接口请求url
-                // let baseUrl =
-            }
-            else {
-                let request = new XMLHttpRequest()
-                // 获取歌曲的bufferArray数据
-                request.open('GET',musicUrl)
-                request.responseType = 'arraybuffer'
-                request.onreadystatechange = function () {
-                    if (request.readyState === 4) {
-                        if (request.status === 200) {
-                            let audioData = request.response
-                            resolve({"audioCtx":audioContext,"arrayBuffer": audioData})
-                        } else {
-                            resolve(null)
-                        }
-                    }
-                }
-                request.send()
-            }
-        })
-    })
-}
+// function getMusicArrayBuffer(musicId){
+//     return new Promise((resolve) => {
+//         getMusicUrl(musicId).then((musicUrl) =>{
+//             // 歌曲收费无法获取连接
+//             if (musicUrl === ""){
+//                 resolve("")
+//             }else if (musicUrl === null){
+//                 // 请求接口失败 换个接口请求url
+//                 // let baseUrl =
+//             }
+//             else {
+//                 let request = new XMLHttpRequest()
+//                 // 获取歌曲的bufferArray数据
+//                 request.open('GET',musicUrl)
+//                 request.responseType = 'arraybuffer'
+//                 request.onreadystatechange = function () {
+//                     if (request.readyState === 4) {
+//                         if (request.status === 200) {
+//                             let audioData = request.response
+//                             resolve({"audioCtx":audioContext,"arrayBuffer": audioData})
+//                         } else {
+//                             resolve(null)
+//                         }
+//                     }
+//                 }
+//                 request.send()
+//             }
+//         })
+//     })
+// }
 function getMusicLyric(musicId){
     return new Promise((resolve, reject)=>{
         $.ajax(musicLyricAPI + musicId).then((data)=>{
@@ -91,16 +91,10 @@ function getMusicLyric(musicId){
 
 function getMusicDetail(playingMusicId){
     return new Promise((resolve,reject)=>{
-        getMusicArrayBuffer(playingMusicId).then((audioCtx) => {
+        getMusicUrl(playingMusicId).then((url) => {
+            songs["url"] = url
             $.ajax(musicDetailAPI + playingMusicId).then((data)=>{
                 data = JSON.parse(data)
-                if (audioCtx === null){
-                    songs["audioCtx"] = null
-                }else if (audioCtx === ""){
-                    songs["audioCtx"] = ""
-                }else {
-                    songs['audioCtx'] = audioCtx
-                }
                 songs["name"] = data.songs[0].name
                 songs["singer"] = []
                 data.songs[0]["ar"].forEach((items) => {
@@ -120,7 +114,6 @@ function getMusicDetail(playingMusicId){
         })
     })
 }
-
 
 export default function getMusicData (playingId){
     return  new Promise((resolve) => {

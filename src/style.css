@@ -279,11 +279,12 @@ li,ol,ul{
     font-size: 15px;
     -webkit-text-fill-color: transparent;
 }
-.frequency{
+.frequency-canvas{
+    padding-left: 3px;
+    overflow: hidden;
     position: absolute;
     left: 0;
     bottom: 45px;
-    border: 1px solid red;
     height: 150px;
     width: 250px;
 }

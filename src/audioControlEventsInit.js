@@ -1,11 +1,13 @@
 import $ from "jquery"
 import {previousMusic, nextMusic} from "./changeMusic";
+import {draw} from "./frequencyInit";
 let audioPlayer = $(".audio-player")
 let cover = $(".cover")
 let backgroundImg = $(".bg-image")
 let playOrderList = ["sequence-play","random-play","simple-cycle-play"]
 let progressBarCur = $(".progress-bar-cur")
-let container = $(".container")
+let canvas = $(".frequency-canvas")
+let musicCurrentTime = $(".music-time ol li:nth-child(1)")
 // 连续点击相关变量
 let timer = null;
 let clickCount = 0  // 连续点击次数
@@ -16,6 +18,7 @@ let newClientX
 let moveClientX
 let secondMove
 let isMove = false
+let intervalID
 localStorage.setItem("isMove","false")
 // 事件委托
 let controlsBar = $(".controls-bar")
@@ -29,10 +32,14 @@ controlsBar.on("click",(e)=>{
         else if (e.target.dataset.playing === 'false') {
             cover[0].style.webkitAnimationPlayState = "running"
             audioPlayer[0].play()
+            intervalID = setInterval(function(){draw()},16)
             e.target.dataset.playing = 'true'
             localStorage.setItem("isPlay", "true")
             // if track is playing pause it
         } else if (e.target.dataset.playing === 'true') {
+            setTimeout(()=>{
+                clearInterval(intervalID)
+            },1)
             cover[0].style.webkitAnimationPlayState = "paused"
             audioPlayer[0].pause()
             e.target.dataset.playing = 'false'
@@ -91,6 +98,7 @@ controlsBar.on("mousedown",(e)=>{
                 oldClientX = newClientX
                 if (moveClientX !== 0 && (moveClientX + paddingLeft) <= parseInt($(".progress-bar").css("width").split("px")[0]) && (moveClientX + paddingLeft) >= 0){
                     progressBarCur.css("padding-left",  paddingLeft + moveClientX + "px")
+                    musicCurrentTime.text(`${parseInt( ((paddingLeft + moveClientX) / secondMove) / 60)}`.padStart(2, '0') + '.' + `${parseInt(((paddingLeft + moveClientX) / secondMove) % 60)}`.padStart(2, '0'))
                     isMove = true
                     localStorage.setItem("isMove","true")
                 }
@@ -122,3 +130,6 @@ $(document).on("mouseup", (e)=>{
 //        cover[0].style.webkitAnimationPlayState = "running";
 //    }
 // });
+function clearCanvas(){
+  canvas[0].getContext("2d").clearRect(0,0,canvas[0].width,canvas[0].height)
+}

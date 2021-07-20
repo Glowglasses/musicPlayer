@@ -7,6 +7,7 @@ import musicLyricInit from "./musicLyricInit"
 import syncLyric from "./musicLyricSync"
 import {nextMusic} from "./changeMusic";
 import {progressTimeSync} from "./progressSync";
+import {frequencyInit,draw} from "./frequencyInit";
 
 let audioPlayer = $(".audio-player")
 let bgImg = $(".bg-image")
@@ -66,7 +67,7 @@ function updateLyricIndex(){
             return  audioPlayer[0].currentTime < item[0]
         })
         if (tem === 0){
-            currentLyricIndex = 0
+            currentLyricIndex = -1
         }else if (tem === -1){
             currentLyricIndex = lyricArray.length - 1
         }else{
@@ -82,14 +83,16 @@ function displayMusicDuration(){
     }
 }
 // 显示频谱
-function displayFrequency(songs){
-
+function displayFrequency(url){
+    frequencyInit(url)
 }
 
 
 function musicTimeEvent(event){
     //显示当前播放时间
-    musicCurrentTime.text(`${parseInt(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${parseInt(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
+    if (localStorage.getItem("isMove") === "false"){
+        musicCurrentTime.text(`${parseInt(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${parseInt(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
+    }
     //歌词同步时间
     if (lyricArray !== undefined){
         center = $(".lyric-list").css("height").split("px")[0] / 2
@@ -100,7 +103,6 @@ function musicTimeEvent(event){
     progressTimeSync(audioPlayer[0].currentTime,audioPlayer[0].duration)
     // 播放结束处理
     if (audioPlayer[0].currentTime >= audioPlayer[0].duration){
-        console.log(playOrderSetting[0].dataset.playOrder)
         if (playOrderSetting[0].dataset.playorder === "sequence-play"){
             nextMusic(1).then()
         }else if (playOrderSetting[0].dataset.playorder === "random-play"){
@@ -114,8 +116,10 @@ function musicTimeEvent(event){
 function display(songs){
     song = songs
     audioPlayer.off("timeupdate")
+    $('.progress-bar-cur').css("padding-left",0)
     displayControls()
-    setAudioSrc(songs["audioCtx"].arrayBuffer)
+    // setAudioSrc(songs["audioCtx"].arrayBuffer)
+    displayFrequency(songs["url"])
     displayImage(songs)
     disPlayMusicInfo(songs)
     displayLyric(songs)

@@ -10,12 +10,12 @@
 <body>
 <div class="bg-image cover-image-url"></div>
 <div class="container">
-    <audio class="audio-player"></audio>
+    <audio class="audio-player" crossOrigin="anonymous"></audio>
     <section>
         <div class="cover"></div>
     </section>
     <section>
-        <canvas class="frequency"></canvas>
+        <canvas class="frequency-canvas"></canvas>
     </section>
     <section class="lyric-display">
         <div class="song-info"></div>
@@ -43,7 +43,12 @@
             <div class="music-list"></div>
         </div>
     </section>
-
+    <section class="preLoad">
+        <img style="display: none;" src="./assets/images/stop.png"></img>
+        <img style="display: none;" src="./assets/images/random_play.png"></img>
+        <img style="display: none;" src="./assets/images/sequence_play.png"></img>
+        <img style="display: none;" src="./assets/images/simple_cycle_play.png"></img>
+    </section>
 </div>
 </body>
 </html>
