@@ -85,7 +85,7 @@ function displayFrequency(url) {
 function musicTimeEvent() {
   //显示当前播放时间
   if (localStorage.getItem('isMove') === 'false') {
-    musicCurrentTime.text(`${parseInt(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${parseInt(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
+    musicCurrentTime.text(`${parseInt(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${Math.round(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
   }
   //歌词同步时间
   if (lyricArray !== undefined) {
