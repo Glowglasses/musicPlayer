@@ -6,6 +6,17 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>simple-music</title>
+    <style type="text/css">
+      svg{
+        vertical-align: -0.15em;
+        overflow: hidden;
+        color: #2c2c2c;
+      }
+      path{
+        fill: currentColor
+      }
+    </style>
+    <script src="//at.alicdn.com/t/font_2712781_qs6cobr6rhs.js"></script>
 </head>
 <body>
 <div class="bg-image cover-image-url"></div>
@@ -23,9 +34,15 @@
     </section>
     <section class="controls-bar">
         <div class="song-control-bar">
-            <button class="previous"></button>
-            <button class="playStyle" data-playing="false"></button>
-            <button class="next"></button>
+                <svg class="icon previous" aria-hidden="true">
+                    <use xlink:href="#icon-previous"></use>
+                </svg>
+                <svg class="icon playStyle" aria-hidden="true" data-playing="false">
+                    <use xlink:href="#icon-play"></use>
+                </svg>
+                <svg class="icon next" aria-hidden="true">
+                    <use xlink:href="#icon-next"></use>
+                </svg>
         </div>
         <div class="progress-bar">
             <div class="progress-bar-cur"></div>
@@ -38,10 +55,19 @@
             </ol>
         </div>
         <div class="setting-bar">
-            <button class="play-order-setting" data-playOrder="sequence-play"></button>
-            <div class="volume-setting"></div>
-            <div class="music-list"></div>
+            <svg aria-hidden="true" class="play-order-setting" data-play-order="sequence-play">
+                <use xlink:href="#icon-sequence"></use>
+            </svg>
+            <svg class="volume-setting">
+                <use xlink:href="#icon-volume"></use>
+            </svg>
+            <svg class="music-list">
+                <use xlink:href="#icon-musicList"></use>
+            </svg>
         </div>
+    </section>
+    <section>
+
     </section>
 </div>
 </body>

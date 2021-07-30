@@ -12,6 +12,7 @@ button {
 
 body {
   position: relative;
+  font-family: Georgia, "Nimbus Roman No9 L", "Songti SC", "Noto Serif CJK SC", "Source Han Serif SC", "Source Han Serif CN", STSong, "AR PL New Sung", "AR PL SungtiL GB", NSimSun, SimSun, "TW\-Sung", "WenQuanYi Bitmap Song", "AR PL UMing CN", "AR PL UMing HK", "AR PL UMing TW", "AR PL UMing TW MBE", PMingLiU, MingLiU, serif;
 }
 
 li, ol, ul {
@@ -186,20 +187,12 @@ li, ol, ul {
   animation: none;
 }
 
-[data-playing="false"] {
-  background-image: url("../assets/images/play.png");
-}
 
-[data-playing="true"] {
-  background-image: url("../assets/images/stop.png");
-}
-
-.previous {
+.previous{
   width: 28px;
   height: 28px;
   left: 5%;
   top: 50%;
-  background-image: url("../assets/images/previous.png");
   background-size: 100%;
   z-index: 2;
 }
@@ -209,7 +202,6 @@ li, ol, ul {
   height: 28px;
   left: 18%;
   top: 50%;
-  background-image: url("../assets/images/next.png");
   background-size: 100%;
   z-index: 2;
 }
@@ -217,7 +209,6 @@ li, ol, ul {
 .volume-setting {
   width: 18px;
   height: 18px;
-  background-image: url("../assets/images/volume.png");
   background-size: 100%;
   background-repeat: no-repeat;
   background-position: center;
@@ -234,15 +225,11 @@ li, ol, ul {
 .music-list {
   width: 18px;
   height: 18px;
-  background-image: url("../assets/images/music_list.png");
   background-size: 85%;
   background-repeat: no-repeat;
   background-position: center;
 }
 
-[data-playOrder="sequence-play"] {
-  background-image: url("../assets/images/sequence_play.png");
-}
 
 @keyframes cover {
   0% {
@@ -261,31 +248,13 @@ li, ol, ul {
   visibility: visible;
 }
 
-[data-playOrder='sequence-play'] {
-  background-image: url("../assets/images/sequence_play.png");
-}
-
-[data-playOrder='random-play'] {
-  background-image: url("../assets/images/random_play.png");
-}
-
-[data-playOrder='simple-cycle-play'] {
-  background-image: url("../assets/images/simple_cycle_play.png");
-}
 
 .masking-out {
-  /*opacity:0.6;*/
   background-color: rgba(255, 255, 255, 0.6);
-  /*background-color: transparent;*/
-  /*opacity: 0.3;*/
 }
 
 .cover-animation-init {
   animation: cover 23s linear infinite;
-}
-
-.message {
-
 }
 
 .lyric-active {
