@@ -23,6 +23,7 @@ function frequencyInit(url) {
   audioPlayer.attr('src', url)
   if (source === undefined) {
     audioPlayer.on('canplaythrough', function () {
+      console.log('ready')
       context = new AudioContext
       source = context.createMediaElementSource(audioPlayer[0])
       analyser = context.createAnalyser()

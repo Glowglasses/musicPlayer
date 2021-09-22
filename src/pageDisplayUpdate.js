@@ -112,7 +112,6 @@ function display(songs) {
   audioPlayer.off('timeupdate')
   $('.progress-bar-cur').css('padding-left', 0)
   displayControls()
-  // setAudioSrc(songs["audioCtx"].arrayBuffer)
   displayFrequency(songs['url'])
   displayImage(songs)
   disPlayMusicInfo(songs)

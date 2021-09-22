@@ -49,6 +49,7 @@ controlsBar.on('click', (e) => {
         clearInterval(intervalID)
       }, 3000)
       cover[0].style.webkitAnimationPlayState = 'paused'
+      console.log('pause')
       audioPlayer[0].pause()
       $currentElement.find(".playStyle")[0].dataset.playing = 'false'
       $currentElement.find(".playStyle > use").attr("xlink:href", "#icon-play")
