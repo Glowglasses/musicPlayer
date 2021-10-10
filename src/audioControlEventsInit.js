@@ -6,6 +6,7 @@ let audioPlayer = $('.audio-player')
 let cover = $('.cover')
 let progressBarCur = $('.progress-bar-cur')
 let musicCurrentTime = $('.music-time ol li:nth-child(1)')
+const frequencyCanvas = $('.frequency-canvas')
 // 连续点击相关变量
 let timer = null
 let clickCount = 0  // 连续点击次数
@@ -159,3 +160,12 @@ $(document).on('mouseup', (e) => {
 //        cover[0].style.webkitAnimationPlayState = "running";
 //    }
 // });
+let colorIndex = 0;
+frequencyCanvas.on('click',() => {
+  const color = ['rgb(255,239,213)','rgb(255,160,122)','rgb(255, 182, 193)']
+  window.localStorage.setItem('color',color[colorIndex])
+  colorIndex++;
+  if (colorIndex === color.length){
+    colorIndex = 0;
+  }
+})

@@ -54,6 +54,10 @@ function drawInit() {
 function draw() {
   temArray = []
   canvasCtx.beginPath()
+  let color = window.localStorage.getItem('color')
+  if (!color){
+    color = 'rgb(255, 182, 193)'
+  }
   canvasCtx.clearRect(0, 0, canvas[0].width, canvas[0].height)
   analyser.getByteFrequencyData(dataArray)
   if (dataArray.length === length) {
@@ -61,13 +65,13 @@ function draw() {
   }
   canvasCtx.fillStyle = 'rgb(0, 0, 0)'
   for (let i = 0; i < meterNum; i++) {
-    canvasCtx.fillStyle = `rgb(255, 182, 193)`
+    canvasCtx.fillStyle = color
     canvasCtx.fillRect(i * (meterWidth + gap), cHeight - (dataArray[(meterNum - i) * step] / 2), meterWidth, dataArray[(meterNum - i) * step] / 2)
     temArray.push((meterNum - i) * step)
   }
   temArray.reverse()
   for (let i = 0; i < temArray.length; i++) {
-    canvasCtx.fillStyle = `rgb(255, 182, 193)`
+    canvasCtx.fillStyle = color
     canvasCtx.fillRect(i * (meterWidth + gap) + meterNum * (meterWidth + gap), cHeight - (dataArray[temArray[i]] / 2), meterWidth, dataArray[temArray[i]] / 2)
   }
 }
