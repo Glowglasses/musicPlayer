@@ -11,4 +11,3 @@ export function progressTimeSync(currentTime, musicDuration) {
     $('.progress-bar-cur').css('padding-left', currentTime * secondMove + 'px')
   }
 }
-

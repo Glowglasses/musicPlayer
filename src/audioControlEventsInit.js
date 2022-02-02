@@ -1,12 +1,13 @@
 import $ from 'jquery'
 import {previousMusic, nextMusic} from './changeMusic'
-import {draw} from './frequencyInit'
+import {draw, frequencyInit} from './frequencyInit'
 
 let audioPlayer = $('.audio-player')
 let cover = $('.cover')
 let progressBarCur = $('.progress-bar-cur')
 let musicCurrentTime = $('.music-time ol li:nth-child(1)')
 const frequencyCanvas = $('.frequency-canvas')
+const progressBar = $('.progress-bar')
 // 连续点击相关变量
 let timer = null
 let clickCount = 0  // 连续点击次数
@@ -30,17 +31,21 @@ controlsBar.on('click', (e) => {
   if ($element.hasClass('playStyle') || $element.parent().hasClass('playStyle')) {
     if (audioPlayer.attr('src') === undefined) {
       return false
-    } else if ($currentElement.find(".playStyle")[0].dataset.playing === 'false') {
+    } else if ($currentElement.find('.playStyle')[0].dataset.playing === 'false') {
+      // if (Math.floor(audioPlayer[0].currentTime) >= Math.floor(audioPlayer[0].duration)) {
+      //   nextMusic(1).then()
+      // }
       cover[0].style.webkitAnimationPlayState = 'running'
+      frequencyInit()
       audioPlayer[0].play()
       intervalID = setInterval(function () {
         draw()
       }, 16)
-      $currentElement.find(".playStyle")[0].dataset.playing = 'true'
-      $currentElement.find(".playStyle > use").attr("xlink:href", "#icon-stop")
+      $currentElement.find('.playStyle')[0].dataset.playing = 'true'
+      $currentElement.find('.playStyle > use').attr('xlink:href', '#icon-stop')
       localStorage.setItem('isPlay', 'true')
       // if track is playing pause it
-    } else if ($currentElement.find(".playStyle")[0].dataset.playing === 'true') {
+    } else if ($currentElement.find('.playStyle')[0].dataset.playing === 'true') {
       // 暂停后，频谱回落
       setTimeout(() => {
         clearInterval(intervalID)
@@ -52,24 +57,24 @@ controlsBar.on('click', (e) => {
       cover[0].style.webkitAnimationPlayState = 'paused'
       console.log('pause')
       audioPlayer[0].pause()
-      $currentElement.find(".playStyle")[0].dataset.playing = 'false'
-      $currentElement.find(".playStyle > use").attr("xlink:href", "#icon-play")
+      $currentElement.find('.playStyle')[0].dataset.playing = 'false'
+      $currentElement.find('.playStyle > use').attr('xlink:href', '#icon-play')
       localStorage.setItem('isPlay', 'false')
     }
   } else if ($element.hasClass('play-order-setting') || $element.parent().hasClass('play-order-setting')) {
     // let playOrderList = ['sequence-play', 'random-play', 'simple-cycle-play']
     // 切换播放顺序
-    if ($currentElement.find('[data-play-order]')[0].dataset.playOrder === "sequence-play") {
+    if ($currentElement.find('[data-play-order]')[0].dataset.playOrder === 'sequence-play') {
       $currentElement.find('[data-play-order]')[0].dataset.playOrder = 'random-play'
-      $currentElement.find('[data-play-order] > use').attr("xlink:href", "#icon-random")
+      $currentElement.find('[data-play-order] > use').attr('xlink:href', '#icon-random')
       localStorage.setItem('playOrder', 'random')
-    } else if ($currentElement.find('[data-play-order]')[0].dataset.playOrder === "random-play") {
+    } else if ($currentElement.find('[data-play-order]')[0].dataset.playOrder === 'random-play') {
       $currentElement.find('[data-play-order]')[0].dataset.playOrder = 'simple-cycle-play'
-      $currentElement.find('[data-play-order] > use').attr("xlink:href", "#icon-simpleCycle")
+      $currentElement.find('[data-play-order] > use').attr('xlink:href', '#icon-simpleCycle')
       localStorage.setItem('playOrder', 'simple')
     } else {
       $currentElement.find('[data-play-order]')[0].dataset.playOrder = 'sequence-play'
-      $currentElement.find('[data-play-order] > use').attr("xlink:href", "#icon-sequence")
+      $currentElement.find('[data-play-order] > use').attr('xlink:href', '#icon-sequence')
       localStorage.setItem('playOrder', 'sequence')
     }
   }
@@ -103,7 +108,7 @@ controlsBar.on('mousedown', (e) => {
     }, 250)
   } else if ($element.hasClass('progress-bar-btn')) {
     if (audioPlayer[0].duration !== 'NaN') {
-      secondMove = parseInt($('.progress-bar').css('width').split('px')[0]) / audioPlayer[0].duration
+      secondMove = parseInt(progressBar.css('width').split('px')[0]) / audioPlayer[0].duration
       // 计算进度条移动距离
       oldClientX = e.clientX + e.target.style.width.split('px')[0]
       $(document).on('mousemove', (e) => {
@@ -112,24 +117,24 @@ controlsBar.on('mousedown', (e) => {
         paddingLeft = parseInt(progressBarCur.css('padding-left').split('px')[0])
         moveClientX = newClientX - oldClientX
         oldClientX = newClientX
-        if (moveClientX !== 0 && (moveClientX + paddingLeft) < parseInt($('.progress-bar').css('width').split('px')[0]) && (moveClientX + paddingLeft) >= 0) {
+        if (moveClientX !== 0 && (moveClientX + paddingLeft) < Math.floor(progressBar.css('width').split('px')[0]) && (moveClientX + paddingLeft) >= 0) {
           progressBarCur.css('padding-left', paddingLeft + moveClientX + 'px')
-          musicCurrentTime.text(`${parseInt(((paddingLeft + moveClientX) / secondMove) / 60)}`.padStart(2, '0') + '.' + `${parseInt(((paddingLeft + moveClientX) / secondMove) % 60)}`.padStart(2, '0'))
+          musicCurrentTime.text(`${Math.floor(((paddingLeft + moveClientX) / secondMove) / 60)}`.padStart(2, '0') + '.' + `${Math.floor(((paddingLeft + moveClientX) / secondMove) % 60)}`.padStart(2, '0'))
           isMove = true
           localStorage.setItem('isMove', 'true')
-        }else if ((moveClientX + paddingLeft) >= parseInt($('.progress-bar').css('width').split('px')[0])){
+        } else if ((moveClientX + paddingLeft) >= parseInt(progressBar.css('width').split('px')[0])) {
           end = true
           musicCurrentTime.text($('.music-time ol li:nth-child(2)').text())
-        }else if ((moveClientX + paddingLeft) < 0){
+        } else if ((moveClientX + paddingLeft) < 0) {
           start = true
-          musicCurrentTime.text("00:00")
+          musicCurrentTime.text('00:00')
         }
       })
     }
     
   } else if ($element.hasClass('progress-bar') || $element.hasClass('progress-bar-cur')) {
     if (audioPlayer[0].duration !== 'NaN') {
-      secondMove = parseInt($('.progress-bar').css('width').split('px')[0]) / audioPlayer[0].duration
+      secondMove = parseInt(progressBar.css('width').split('px')[0]) / audioPlayer[0].duration
       audioPlayer[0].currentTime = (e.offsetX) / secondMove
       progressBarCur.css('padding-left', e.offsetX + 'px')
     }
@@ -138,11 +143,17 @@ controlsBar.on('mousedown', (e) => {
 $(document).on('mouseup', (e) => {
   e.preventDefault()
   if (isMove) {
-    if (start){
+    if (start) {
       audioPlayer[0].currentTime = 0
-    }else if(end){
-      audioPlayer.currentTime = audioPlayer[0].duration
-    }else {
+    } else if (end) {
+      cover[0].style.webkitAnimationPlayState = 'paused'
+      console.log('pause')
+      audioPlayer[0].pause()
+      $('.playStyle')[0].dataset.playing = 'false'
+      $('.playStyle > use').attr('xlink:href', '#icon-play')
+      localStorage.setItem('isPlay', 'false')
+      audioPlayer[0].currentTime = audioPlayer[0].duration
+    } else {
       audioPlayer[0].currentTime = (paddingLeft + moveClientX) / secondMove
     }
     isMove = false
@@ -160,12 +171,12 @@ $(document).on('mouseup', (e) => {
 //        cover[0].style.webkitAnimationPlayState = "running";
 //    }
 // });
-let colorIndex = 0;
-frequencyCanvas.on('click',() => {
-  const color = ['rgb(255,239,213)','rgb(255,160,122)','rgb(255, 182, 193)']
-  window.localStorage.setItem('color',color[colorIndex])
-  colorIndex++;
-  if (colorIndex === color.length){
-    colorIndex = 0;
+let colorIndex = 0
+frequencyCanvas.on('click', () => {
+  const color = ['rgb(255,239,213)', 'rgb(255,160,122)', 'rgb(255, 182, 193)']
+  window.localStorage.setItem('color', color[colorIndex])
+  colorIndex++
+  if (colorIndex === color.length) {
+    colorIndex = 0
   }
 })

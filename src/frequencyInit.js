@@ -18,25 +18,24 @@ let meterNum
 let step
 let temArray = []
 
-function frequencyInit(url) {
+function frequencyInit() {
   audioPlayer = $('.audio-player')
-  audioPlayer.attr('src', url)
+  // audioPlayer.attr('src', url)
   if (source === undefined) {
-    audioPlayer.on('canplaythrough', function () {
-      console.log('ready')
-      context = new AudioContext
-      source = context.createMediaElementSource(audioPlayer[0])
-      analyser = context.createAnalyser()
-      source.connect(analyser)
-      analyser.connect(context.destination)
-      analyser.smoothingTimeConstant = 0.85
-      analyser.fftSize = 128
-      length = analyser.frequencyBinCount
-      //创建数据
-      dataArray = new Uint8Array(length)
-      audioPlayer.off('canplaythrough')
-      drawInit()
-    })
+    // audioPlayer.on('canplaythrough', function () {
+    context = new AudioContext
+    source = context.createMediaElementSource(audioPlayer[0])
+    analyser = context.createAnalyser()
+    source.connect(analyser)
+    analyser.connect(context.destination)
+    analyser.smoothingTimeConstant = 0.85
+    analyser.fftSize = 128
+    length = analyser.frequencyBinCount
+    //创建数据
+    dataArray = new Uint8Array(length)
+    audioPlayer.off('canplaythrough')
+    drawInit()
+    // })
   }
 }
 
@@ -55,7 +54,7 @@ function draw() {
   temArray = []
   canvasCtx.beginPath()
   let color = window.localStorage.getItem('color')
-  if (!color){
+  if (!color) {
     color = 'rgb(255, 182, 193)'
   }
   canvasCtx.clearRect(0, 0, canvas[0].width, canvas[0].height)

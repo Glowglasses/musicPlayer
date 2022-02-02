@@ -72,20 +72,26 @@ function updateLyricIndex() {
 function displayMusicDuration() {
   audioPlayer[0].load()
   audioPlayer[0].oncanplay = () => {
-    musicDuration.text(`${parseInt(audioPlayer[0].duration / 60)}`.padStart(2, '0') + '.' + `${parseInt(audioPlayer[0].duration % 60)}`.padStart(2, '0'))
+    musicDuration.text(`${Math.floor(audioPlayer[0].duration / 60)}`.padStart(2, '0') + '.' + `${Math.floor(audioPlayer[0].duration % 60)}`.padStart(2, '0'))
   }
 }
 
 // 显示频谱
 function displayFrequency(url) {
-  frequencyInit(url)
+  audioPlayer = $('.audio-player')
+  audioPlayer.attr('src', url)
+  // frequencyInit(url)
 }
 
 
 function musicTimeEvent() {
   //显示当前播放时间
-  if (localStorage.getItem('isMove') === 'false') {
-    musicCurrentTime.text(`${parseInt(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${Math.round(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
+  if (localStorage.getItem('isMove') === 'false' ) {
+    if(audioPlayer[0].currentTime >= audioPlayer[0].duration){
+      musicCurrentTime.text(`${Math.floor(audioPlayer[0].duration / 60)}`.padStart(2, '0') + '.' + `${Math.floor(audioPlayer[0].duration % 60)}`.padStart(2, '0'))
+    }else {
+      musicCurrentTime.text(`${Math.floor(audioPlayer[0].currentTime / 60)}`.padStart(2, '0') + '.' + `${Math.floor(audioPlayer[0].currentTime % 60)}`.padStart(2, '0'))
+    }
   }
   //歌词同步时间
   if (lyricArray !== undefined) {
@@ -97,11 +103,11 @@ function musicTimeEvent() {
   progressTimeSync(audioPlayer[0].currentTime, audioPlayer[0].duration)
   // 播放结束处理
   if (audioPlayer[0].currentTime >= audioPlayer[0].duration) {
-    if (playOrderSetting[0].dataset.playorder === 'sequence-play') {
+    if (playOrderSetting[0].dataset.playOrder === 'sequence-play') {
       nextMusic(1).then()
-    } else if (playOrderSetting[0].dataset.playorder === 'random-play') {
+    } else if (playOrderSetting[0].dataset.playOrder === 'random-play') {
     
-    } else if (playOrderSetting[0].dataset.playorder === 'simple-cycle-play') {
+    } else if (playOrderSetting[0].dataset.playOrder === 'simple-cycle-play') {
       display(song)
     }
   }
